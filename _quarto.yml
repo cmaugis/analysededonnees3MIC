@@ -1,0 +1,29 @@
+project:
+  type: website
+  output-dir: docs 
+
+website:
+  title: "3MIC-Analyse de données"
+  navbar:
+    left:
+      - text: TP1
+        href: TP1-InitR-Sujet.qmd
+      - text: TP2
+        href: TP2-StatDescrip-Sujet.qmd
+      - text: TP3
+        href: TP3-ACP-Sujet.qmd
+      - text: TP4
+        href: TP4-Kmeans-Sujet.qmd
+      - text: TP5
+        href: TP5-CAH-DBSCAN-Sujet.qmd
+    logo: LogoINSAToulouse.jpg
+    search: true 
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+editor: visual
+

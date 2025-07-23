@@ -1,0 +1,14 @@
+mclust
+cluster
+MASS
+clusterSim
+ggplot2
+factoextra
+FactoMineR
+reshape2
+circlize
+ggalluvial
+viridisLite
+viridis
+dbscan
+seriation

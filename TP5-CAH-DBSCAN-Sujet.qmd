@@ -1,0 +1,225 @@
+---
+title: "TP5 : Clustering - DBSCAN et CAH"
+execute:
+  echo: true
+  cache: true
+  message: false
+  warning: false 
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    toc-title: Contents
+    toc-location: left
+    number-sections: true
+---
+
+L'objectif de ce TP est d'illustrer les notions abordées pour la classification hiérarchique et la méthode DBSCAN. Les librairies R nécessaires pour ce TP :
+
+```{r}
+#| echo: true
+#| error: false
+#| warning: false
+#| message: false
+
+library(mclust)
+library(clusterSim)
+library(factoextra)
+library(FactoMineR)
+library(ggplot2)
+library(reshape2)
+library(circlize)
+library(ggalluvial)
+library(viridis)
+library(dbscan)
+library(seriation)
+```
+
+# Clustering hiérarchique
+
+On reprend dans ce TP les données `wine` disponibles sur la page moodle du cours. On charge ici les données.
+
+```{r}
+wine<-read.table("wine.txt",header=T)
+wine$Qualite = as.factor(wine$Qualite)
+wine$Type = factor(wine$Type, labels = c("blanc", "rouge"))
+wineinit<-wine
+wine[,-c(1,2)]<-scale(wine[,-c(1,2)],center=T,scale=T)
+head(wine)
+```
+
+On fait une ACP pour la visualisation des résultats dans la suite
+
+```{r}
+resacp<-PCA(wine,quali.sup=c(1,2), scale.unit = TRUE,graph=FALSE)
+fviz_pca_ind(resacp,geom=c("point"),habillage=2)
+```
+
+**Question** : A l'aide de la fonction `hclust()`, faites une classification hiérarchique des données de vins avec les mesures d'agrégation `single`, `complete` et `average` respectivement. Comparez visuellement les dendrogrammes associés. Commentez.
+
+```{r}
+#| eval: false
+
+# A COMPLETER
+hclustsingle<-hclust(...)
+hclustcomplete<-hclust(...)
+hclustaverage<-hclust(...)
+
+# Dendrogramme
+plot(hclustsingle,hang=-1,labels=FALSE)
+...
+
+fviz_dend(hclustsingle,show_labels=FALSE)
+...
+
+```
+
+**Question :** Déduisez du dendrogramme avec la mesure d'agrégation `complete` une classification en 3 classes. Vous pouvez utiliser la fonction `cutree()`. Comparez-la avec les variables **Qualité** et **Type**. Commentez.
+
+```{r}
+#| eval: false
+# A COMPLETER
+```
+
+**Question :** Tracez la distribution des variables quantitatives de `wine` en fonction de la classification en 3 classes de la question précédente. Commentez.
+
+```{r}
+#| eval: false
+
+df<-data.frame(wine[,-c(1,2)],Class=as.factor(ClassK3))
+df<-melt(df,id="Class")
+ggplot(df,aes(x=variable,y=value))+
+  geom_violin(aes(fill=Class))
+```
+
+**Question :** Dans cette question et pour les suivantes, on se focalise sur la mesure d'agrégation de Ward. Ajustez une classification hiérarchique avec la mesure de Ward. Que représentent les hauteurs du dendrogramme dans ce cas ?
+
+```{r}
+#| eval: false
+
+# A COMPLETER
+hward<-hclust(...)
+fviz_dend(hward,show_labels=FALSE)
+```
+
+**Question :** Déterminez le nombre de classes à retenir avec l'indice de Calinski-Harabasz. Vous pouvez vous aider de la fonction `ìndex.G1()` de la librairie `clusterSim`. Tracez la classification obtenue sur le dendrogramme et sur le premier plan factoriel de l'ACP.
+
+```{r}
+#| eval: false
+
+# A completer
+CH<-NULL
+Kmax<-20
+for (k in 2:Kmax){
+  CH<-c(CH,index.G1(x=..., cl=....))
+}
+daux<-data.frame(NbClust=2:Kmax,CH=CH)
+ggplot(daux,aes(x=NbClust,y=CH))+
+  geom_line()+
+  geom_point()
+
+ClustCH<-cutree(hward,k=....)
+fviz_dend(....)
+fviz_pca_ind(....)
+```
+
+**Question :** Comparez la classification obtenue avec la méthode des Kmeans dans le TP 1 et celle obtenue à la question précédente.
+
+```{r}
+#| eval: false
+
+# A completer
+reskmeans<-kmeans(....)
+...
+
+```
+
+# DBSCAN
+
+Dans cette partie, on considère les données simulées `chameleon_ds7` disponibles dans la librairie `seriation`.
+
+```{r}
+library(seriation)
+data(Chameleon)
+ggplot(chameleon_ds7,aes(x=x,y=y))+
+  geom_point()
+```
+
+## DBSCAN à paramètres fixés
+
+**Question :** Dans un premier temps, utilisez l'algorithme DBSCAN avec les paramètres `minPts=25` et `eps= 15` à l'aide de la fonction `dbscan()` de la librairie `dbscan`. Quels sont les effectifs par classe ? Combien d'individus ne sont pas classés ?
+
+```{r}
+#| eval: false
+
+# A COMPLETER
+minPts<-25
+eps<-15
+res.db <- dbscan::dbscan(...)
+table(...)
+```
+
+```{r}
+#| eval: false
+
+fviz_cluster(res.db, chameleon_ds7, geom="point",ellipse="FALSE")+
+  theme(legend.position="none")+
+  xlab("")+
+  ylab("")+
+  ggtitle("Avec DBSCAN")
+```
+
+## Influence des paramètres de DBSCAN
+
+**Question :** Pour étudier l'influence des paramètres `minPts` et `eps`, évaluez le nombre de classes obtenues et le nombre d'individus non classés pour différentes valeurs de ces paramètres. Faites varier minPts dans $\{5,10,15,20,25,30,35,40\}$ et eps dans $\{5,6,\ldots,20\}$.
+
+```{r}
+#| eval: false
+minPts <- ...
+eps <- ...
+NBCluster <- matrix(0,nrow=length(minPts),ncol=length(eps))
+NBNonCl <-matrix(0,nrow=length(minPts),ncol=length(eps))
+for (i in 1:length(minPts)){
+  for (j in 1:length(eps)){
+    res<-dbscan::dbscan(chameleon_ds7, eps=eps[j], minPts=minPts[i])
+    NBCluster[i,j] <- ...
+    NBNonCl[i,j] <- ...
+  }
+}
+
+df<-data.frame(eps=rep(eps,each=length(minPts)),
+              minPts=as.factor(rep(minPts,length(eps))),
+              NBCluster=c(NBCluster),
+              NBNonCl=c(NBNonCl)*100/nrow(chameleon_ds7))
+
+ggplot(df,aes(x=eps,y=NBCluster,col=minPts))+
+  geom_point()+
+  geom_line()
+ggplot(df,aes(x=eps,y=NBNonCl,col=minPts))+
+  geom_point()+
+  geom_line()
+```
+
+**Question :** Pour une valeur de `minPts=30`, déterminez à l'aide de la question précédente la valeur de `eps` qui permet d'avoir un clustering en $9$ classes. Vérifiez ce clustering sur le nuage de points.
+
+```{r}
+# A COMPLETER
+```
+
+**Question :** Pour une valeur de `minPts=30`, tracez le graphe de distance kNN afin de choisir le paramètre `eps`. Vous pouvez utiliser la fonction `kNNdistplot()`. Qu'en pensez-vous ? Etudiez le clustering obtenu.
+
+```{r}
+#| eval: false
+
+# A COMPLETER
+```
+
+## Comparaison avec Kmeans
+
+**Question :** Mettez en place une stratégie de classification de ces données avec les Kmeans. Comparez les résultats. Retrouvez les grandes caractéristiques de ces deux méthodes.
+
+```{r}
+#| eval: false
+
+# A COMPLETER
+```

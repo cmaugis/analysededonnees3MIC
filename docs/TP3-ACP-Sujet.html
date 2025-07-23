@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3MIC-Analyse de données - TP3 : Analyse en Composantes Principales (ACP)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./LogoINSAToulouse.jpg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">3MIC-Analyse de données</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./TP1-InitR-Sujet.html" rel="" target="">
+ <span class="menu-text">TP1</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./TP2-StatDescrip-Sujet.html" rel="" target="">
+ <span class="menu-text">TP2</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./TP3-ACP-Sujet.html" rel="" target="" aria-current="page">
+ <span class="menu-text">TP3</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./TP4-Kmeans-Sujet.html" rel="" target="">
+ <span class="menu-text">TP4</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./TP5-CAH-DBSCAN-Sujet.html" rel="" target="">
+ <span class="menu-text">TP5</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#description-des-données" id="toc-description-des-données" class="nav-link active" data-scroll-target="#description-des-données"><span class="header-section-number">1</span> Description des données</a></li>
+  <li><a href="#acp-centrée" id="toc-acp-centrée" class="nav-link" data-scroll-target="#acp-centrée"><span class="header-section-number">2</span> ACP centrée</a>
+  <ul class="collapse">
+  <li><a href="#a-la-main" id="toc-a-la-main" class="nav-link" data-scroll-target="#a-la-main"><span class="header-section-number">2.1</span> A la main</a></li>
+  <li><a href="#avec-le-package-factominer" id="toc-avec-le-package-factominer" class="nav-link" data-scroll-target="#avec-le-package-factominer"><span class="header-section-number">2.2</span> Avec le package FactoMineR</a></li>
+  </ul></li>
+  <li><a href="#acp-centrée-réduite" id="toc-acp-centrée-réduite" class="nav-link" data-scroll-target="#acp-centrée-réduite"><span class="header-section-number">3</span> ACP centrée réduite</a>
+  <ul class="collapse">
+  <li><a href="#a-la-main-1" id="toc-a-la-main-1" class="nav-link" data-scroll-target="#a-la-main-1"><span class="header-section-number">3.1</span> A la main</a></li>
+  <li><a href="#avec-factominer" id="toc-avec-factominer" class="nav-link" data-scroll-target="#avec-factominer"><span class="header-section-number">3.2</span> Avec FactoMineR</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">TP3 : Analyse en Composantes Principales (ACP)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="description-des-données" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Description des données</h1>
+<p>Les données étudiées dans ce TP ont été recueillies à Rennes dans <span class="math inline">\(112\)</span> stations durant l’été 2001. Les 13 variables observées sont :</p>
+<ul>
+<li>maxO3 : Maximum de concentration d’ozone observé sur la journée en <span class="math inline">\(\mu\)</span>gr/m3</li>
+<li>T9, T12, T15 : Température observée à 9, 12 et 15h</li>
+<li>Ne9, Ne12, Ne15 : Nébulosité observée à 9, 12 et 15h</li>
+<li>Vx9, Vx12, Vx15 : Composante E-O du vent à 9, 12 et 15h</li>
+<li>vent : orientation du vent à 12h</li>
+<li>pluie : occurrence ou non de précipitations</li>
+<li>maxO3v : Maximum de concentration d’ozone observé la veille</li>
+</ul>
+<p>On charge les données, on transforme les variables qualitatives <strong>pluie</strong> et <strong>vent</strong>, et on supprime la dernière variable que l’on n’utilisera pas dans ce TP.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-2_cddbacc4c3d30f19e0283899dbfaede8">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Ozone<span class="ot">&lt;-</span><span class="fu">read.table</span>(<span class="st">"Ozone.txt"</span>,<span class="at">header=</span>T)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Ozone<span class="sc">$</span>pluie<span class="ot">&lt;-</span><span class="fu">as.factor</span>(Ozone<span class="sc">$</span>pluie)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Ozone<span class="sc">$</span>vent<span class="ot">&lt;-</span><span class="fu">as.factor</span>(Ozone<span class="sc">$</span>vent)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Ozone<span class="ot">&lt;-</span>Ozone[,<span class="sc">-</span><span class="dv">11</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Ozone)   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ainsi on a un jeu de données composé de <span class="math inline">\(n=112\)</span> individus et <span class="math inline">\(p=12\)</span> variables.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-3_45542f0de6ad744f00f35f3bfd7d2aa9">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Ozone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Pour vous familiariser avec le jeu de données, quelques statistiques descriptives ont été programmées. Commentez les résultats.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-4_547cc0f32c147b496c749c76405bffce">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">melt</span>(Ozone[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">11</span>,<span class="dv">12</span>)]),<span class="fu">aes</span>(<span class="at">x=</span>variable,<span class="at">y=</span>value))<span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>g1<span class="ot">&lt;-</span><span class="fu">ggplot</span>(Ozone,<span class="fu">aes</span>(<span class="at">x=</span>maxO3))<span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>g2<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="fu">melt</span>(Ozone[,<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>)]),<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">color=</span>variable))<span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>g3<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="fu">melt</span>(Ozone[,<span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>)]),<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">color=</span>variable))<span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>g4<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="fu">melt</span>(Ozone[,<span class="fu">c</span>(<span class="dv">8</span><span class="sc">:</span><span class="dv">10</span>)]),<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">color=</span>variable))<span class="sc">+</span>   <span class="fu">geom_density</span>()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(g1,g2,g3,g4,<span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Ozone, <span class="fu">aes</span>(<span class="at">x =</span> pluie)) <span class="sc">+</span>  </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> (..count..)<span class="sc">/</span><span class="fu">sum</span>(..count..)))<span class="sc">+</span><span class="fu">ylab</span>(<span class="st">""</span>)<span class="sc">+</span><span class="fu">ggtitle</span>(<span class="st">"Frequences"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>quan <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">table</span>(Ozone<span class="sc">$</span>vent))<span class="sc">/</span><span class="fu">nrow</span>(Ozone)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group =</span> <span class="fu">levels</span>(Ozone<span class="sc">$</span>vent),<span class="at">value =</span> quan)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span>value, <span class="at">fill=</span>group))<span class="sc">+</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">stat =</span> <span class="st">"identity"</span>)<span class="sc">+</span> </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start=</span><span class="dv">0</span>)<span class="sc">+</span> </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Représentez graphiquement les corrélations des variables quantitatives (vous pourrez utiliser la fonction <code>corrplot()</code>). Quelles sont les variables linéairement corrélées (ou non) ?</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-5_b894e0a61a83988f649233da94368e72">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="acp-centrée" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> ACP centrée</h1>
+<p>Dans cette section, on décide de faire une analyse en composantes principales (ACP) sur les données centrées. A l’aide de la fonction <code>scale()</code>, centrez les données. Vérifiez que les variables sont bien centrées avec <code>apply(...,2,mean)</code>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-6_1ebf6a4239c37f37747623c107ffbe9f">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>OzoneC<span class="ot">&lt;-</span><span class="fu">scale</span>(...) <span class="co"># A COMPLETER</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(OzoneC,<span class="dv">2</span>,mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="a-la-main" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="a-la-main"><span class="header-section-number">2.1</span> A la main</h2>
+<p><strong>Question</strong> : A l’aide de la fonction <code>diag()</code>, créez la matrice de poids <span class="math inline">\(W=\frac 1 n I_n\)</span> et la métrique <span class="math inline">\(M=I_p\)</span>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-7_ed3382a106073bf154832175a5d40c4d">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>n<span class="ot">&lt;-</span><span class="fu">nrow</span>(OzoneC)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p<span class="ot">&lt;-</span><span class="fu">ncol</span>(OzoneC)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>W<span class="ot">&lt;-</span> ...</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>M<span class="ot">&lt;-</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Quelle matrice cherche-t-on à diagonaliser dans ce cadre en ACP ? Programmez cette matrice (rappelons que la multiplication matricielle est <code>%*%</code>) et diagonalisez-la à l’aide de la fonction <code>eigen()</code>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-8_c8e8831d154151ca0b90163d313a3f2a">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Gamma<span class="ot">&lt;-</span> .... </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>A<span class="ot">&lt;-</span><span class="fu">eigen</span>(...)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Que représentent les valeurs propres (<code>A$values</code>) dans ce cas ? Que représente la somme de ces valeurs propres ? Vérifiez numériquement.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-9_2979d75d6a1bccf9053a2a4cf2f388a9">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Calculez les pourcentages (cumulés ou non) d’inertie portés par chaque axe. Combien de composantes principales décidez-vous de retenir ? Vous pouvez vous aider des fonctions <code>sum()</code> et <code>cumsum()</code>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-10_718a5da754d6184cb2298fee50f4da33">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Que représentent les vecteurs propres (<code>A$vectors</code>) ? Construisez la matrice <span class="math inline">\(C\)</span> des composantes principales et vérifiez que la matrice <span class="math inline">\(C\)</span> est de dimension <span class="math inline">\(n\times p\)</span>. Que représentent les coordonnées de la première colonne de <span class="math inline">\(C\)</span> ?</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-11_4e0a386b89822d76ca8f1bd07bb08be1">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="avec-le-package-factominer" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="avec-le-package-factominer"><span class="header-section-number">2.2</span> Avec le package FactoMineR</h2>
+<p>Rassurez-vous, nous avons programmé les étapes de l’ACP à des fins pédagogiques. En pratique, on utilise la librairie <code>FactoMineR</code>. Et on s’appuie sur la librairie <code>factoextra</code> pour les graphiques.</p>
+<p>On commence par programmer l’ACP centrée (pas réduite, <code>scale.unit=F</code>). On peut déclarer à la fonction <code>PCA</code> des variables qualitatives et quantitatives supplémentaires, ainsi que des individus supplémentaires. Ces éléments ne sont donc pas utilisés pour calculer l’ACP mais peuvent être exploités par la suite. Ici, on déclare donc les deux variables qualitatives <strong>pluie</strong> et <strong>vent</strong>. On trace ensuite les valeurs propres avec la fonction <code>fviz_eig()</code>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-12_90f0fdfd22839d3e2aeff051c2cc4c70">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>respca<span class="ot">&lt;-</span><span class="fu">PCA</span>(Ozone,<span class="at">quali.sup=</span><span class="fu">c</span>(<span class="dv">11</span>,<span class="dv">12</span>),<span class="at">scale.unit =</span> F,<span class="at">graph=</span>F)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>respca<span class="sc">$</span>eig</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_eig</span>(respca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="etude-des-individus" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="etude-des-individus"><span class="header-section-number">2.2.1</span> Etude des individus</h3>
+<p><strong>Question :</strong> Que contient la sortie <code>respca$ind$coord$</code> ? Comparez avec les résultats de la partie précédente ? Vérifiez visuellement à l’aide de la commande <code>fviz_pca_ind(respca)</code>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-13_f59065ffb4dfa8cda6df66b5d3bdc27f">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(respca,<span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Que représentent les graphiques obtenus par les codes suivants ? Commentez.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-14_9360515b3816c8a4707745f9b1e9d9d7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(respca,<span class="at">col.ind=</span><span class="st">"contrib"</span>,<span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(respca,<span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>),<span class="at">select.ind =</span> <span class="fu">list</span>(<span class="at">cos2=</span><span class="fl">0.95</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(respca,<span class="at">habillage=</span><span class="dv">11</span>,<span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(respca,<span class="at">habillage=</span><span class="dv">12</span>,<span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="etude-des-variables" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="etude-des-variables"><span class="header-section-number">2.2.2</span> Etude des variables</h3>
+<p><strong>Question :</strong> On représente le graphique des corrélations entre les variables initiales et les méta-variables. Commentez.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-15_c001bfca40c907166416968045d7f7e9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(respca,<span class="at">choix=</span><span class="st">"varcor"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Afin de visualiser les corrélations des variables initiales avec toutes les méta-variables, utilisez la fonction <code>corrplot()</code>. Commentez.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-16_118b1f9325cd945e8fadc16d932f9e08">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(respca<span class="sc">$</span>var<span class="sc">$</span>cor,<span class="at">method=</span><span class="st">"ellipse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="acp-centrée-réduite" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> ACP centrée réduite</h1>
+<section id="a-la-main-1" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="a-la-main-1"><span class="header-section-number">3.1</span> A la main</h2>
+<p>On fait maintenant une analyse en composantes principales sur les données centrées et réduites.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-17_94c2fcdeed204fb7d5ff62233f961ea2">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>n<span class="ot">&lt;-</span><span class="fu">nrow</span>(OzoneC)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>s<span class="ot">&lt;-</span><span class="fu">sqrt</span>((n<span class="dv">-1</span>)<span class="sc">*</span><span class="fu">apply</span>(OzoneC,<span class="dv">2</span>,var)<span class="sc">/</span>n)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>OzoneCR<span class="ot">&lt;-</span>OzoneC<span class="sc">%*%</span><span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span>s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Comparez <code>OzoneCR</code> avec <code>scale(Ozone[,-c(11,12)])</code>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-18_9eb0db9edcbc2f3955a6171e03cf3ca9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Quelle matrice cherche-t-on à diagonaliser dans ce cadre en ACP ? Programmez cette matrice et diagonalisez-la à l’aide de la fonction <code>eigen()</code>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-19_67d959f33404d566c549c2d9daf14114">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Gamma2<span class="ot">&lt;-</span> .... </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>B<span class="ot">&lt;-</span><span class="fu">eigen</span>(...)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Que représentent les valeurs propres dans ce cas ? Que représente la somme de ces valeurs propres ? Vérifiez numériquement.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-20_8e0157b69614590c81e0b720353eedba">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Comment peut-on obtenir les résultats de cette ACP centrée réduite à partir du tableau de données centrées. Vérifiez numériquement.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-21_434fb3d3350691cd58704a44f6bcc2d1">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="avec-factominer" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="avec-factominer"><span class="header-section-number">3.2</span> Avec FactoMineR</h2>
+<p><strong>Question :</strong> On fait une ACP centrée réduite à l’aide de la fonction <code>PCA()</code> de la librairie <code>FactoMineR</code> en imposant <code>scale.unit=T</code> et on trace les valeurs propres à l’aide de <code>fviz_eig()</code> de la librairie <code>factoextra</code>. Interprétez les résultats.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-22_5e3c6c3f593cff4d05410b3b8250b205">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>respca2<span class="ot">&lt;-</span><span class="fu">PCA</span>(Ozone,<span class="at">quali.sup=</span><span class="fu">c</span>(<span class="dv">11</span>,<span class="dv">12</span>),<span class="at">scale.unit=</span>T,<span class="at">graph=</span>F)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>respca2<span class="sc">$</span>eig</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_eig</span>(respca2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Représentez le graphe des individus et celui des variables à l’aide des fonctions <code>fviz_pca_ind()</code>et <code>fviz_pca_var()</code> dans le premier plan factoriel. Quelles différences remarquez-vous avec l’ACP centrée ?</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-23_b4935c453461ab8caa034787c19f8377">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Afin de visualiser les corrélations des variables intiales avec toutes les méta-variables, utilisez la fonction <code>corrplot()</code>. Commentez.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-24_83caf002ca9f056ab2ac06128668365b">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Poursuivez l’exploitation des résultats en regardant d’autres plans factoriels, en exploitant l’information des variables qualitatives <strong>pluie</strong> et <strong>vent</strong>.</p>
+<div class="cell" data-hash="TP3-ACP-Sujet_cache/html/unnamed-chunk-25_aec76f9349938639c87e407691270568">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

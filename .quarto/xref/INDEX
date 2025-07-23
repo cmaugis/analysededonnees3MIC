@@ -1,0 +1,59 @@
+{
+  "index.qmd": {
+    "index.html": "0f029497"
+  },
+  "about.qmd": {
+    "about.html": "db6983b3"
+  },
+  "TP1-InitR/2526-TP1-InitR-Sujet.qmd": {
+    "2526-TP1-InitR-Sujet.html": "79432729"
+  },
+  "TP1-InitR/2526-TP1-InitR-Correction.qmd": {
+    "2526-TP1-InitR-Correction.html": "5d8ce358"
+  },
+  "TP1-InitR/ExempleQuarto.qmd": {
+    "ExempleQuarto.html": "3db5c98b"
+  },
+  "TP5-CAH-DBSCAN/2526-TP5-CAH-DBSCAN-Sujet.qmd": {
+    "2526-TP5-CAH-DBSCAN-Sujet.html": "96c7c085"
+  },
+  "TP5-CAH-DBSCAN/2526-TP5-CAH-DBSCAN-Correction.qmd": {
+    "2526-TP5-CAH-DBSCAN-Correction.html": "06214356"
+  },
+  "TP4-Kmeans/2526-TP4-Kmeans-Sujet.qmd": {
+    "2526-TP4-Kmeans-Sujet.html": "183d29d4"
+  },
+  "TP4-Kmeans/2526-TP4-Kmeans-Correction.qmd": {
+    "2526-TP4-Kmeans-Correction.html": "d18dd9ea"
+  },
+  "TP2-StatDesc/2526-TP2-StatDescriptive-Correction.qmd": {
+    "2526-TP2-StatDescriptive-Correction.html": "f86a6d90"
+  },
+  "TP2-StatDesc/2526-TP2-StatDescrip-Sujet.qmd": {
+    "2526-TP2-StatDescrip-Sujet.html": "f6d18038"
+  },
+  "TP3-ACP/2526-TP3-ACP-Sujet.qmd": {
+    "2526-TP3-ACP-Sujet.html": "36f66d1b"
+  },
+  "TP3-ACP/2526-TP3-ACP-Correction.qmd": {
+    "2526-TP3-ACP-Correction.html": "0823aecf"
+  },
+  "TP3-ACP-Sujet.qmd": {
+    "TP3-ACP-Sujet.html": "3f9fd9f8"
+  },
+  "TP2-StatDescrip-Sujet.qmd": {
+    "TP2-StatDescrip-Sujet.html": "23202c55"
+  },
+  "TP4-Kmeans-Sujet.qmd": {
+    "TP4-Kmeans-Sujet.html": "51105140"
+  },
+  "ExempleQuarto.qmd": {
+    "ExempleQuarto.html": "ee49db34"
+  },
+  "TP5-CAH-DBSCAN-Sujet.qmd": {
+    "TP5-CAH-DBSCAN-Sujet.html": "c7d13d2a"
+  },
+  "TP1-InitR-Sujet.qmd": {
+    "TP1-InitR-Sujet.html": "9d60ee5e"
+  }
+}

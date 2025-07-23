@@ -1,0 +1,15 @@
+<b><h4>Cours d'Analyse de Données de 3MIC</h4></b> 
+
+1. Initiation à R et à la rédaction avec Quarto
+
+2. Statistiques descriptives
+  - Analyse unidimensionnelle
+  - Analyse bidimensionnelle
+  - Analyse en Composantes Principales (ACP)
+
+3. Clustering
+  - Introduction
+  - Dissimilarité, distance et inertie
+  - Kmeans et variantes
+  - DBSCAN
+  - Classification hiérarchique
