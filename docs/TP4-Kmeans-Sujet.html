@@ -155,15 +155,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul class="collapse">
-  <li><a href="#prise-en-main-des-données-de-vins" id="toc-prise-en-main-des-données-de-vins" class="nav-link active" data-scroll-target="#prise-en-main-des-données-de-vins"><span class="header-section-number">1</span> Prise en main des données de vins</a>
+  <li><a href="#prise-en-main-des-données-datagym3mic" id="toc-prise-en-main-des-données-datagym3mic" class="nav-link active" data-scroll-target="#prise-en-main-des-données-datagym3mic"><span class="header-section-number">1</span> Prise en main des données DataGym3MIC</a>
   <ul class="collapse">
   <li><a href="#lecture-des-données" id="toc-lecture-des-données" class="nav-link" data-scroll-target="#lecture-des-données"><span class="header-section-number">1.1</span> Lecture des données</a></li>
   <li><a href="#statistiques-descriptives-avec-r" id="toc-statistiques-descriptives-avec-r" class="nav-link" data-scroll-target="#statistiques-descriptives-avec-r"><span class="header-section-number">1.2</span> Statistiques descriptives avec R</a></li>
   </ul></li>
   <li><a href="#classification-avec-lalgorithme-des-kmeans" id="toc-classification-avec-lalgorithme-des-kmeans" class="nav-link" data-scroll-target="#classification-avec-lalgorithme-des-kmeans"><span class="header-section-number">2</span> Classification avec l’algorithme des Kmeans</a>
   <ul class="collapse">
-  <li><a href="#a-k3-fixé" id="toc-a-k3-fixé" class="nav-link" data-scroll-target="#a-k3-fixé"><span class="header-section-number">2.1</span> A K=3 fixé</a></li>
+  <li><a href="#a-k4-fixé" id="toc-a-k4-fixé" class="nav-link" data-scroll-target="#a-k4-fixé"><span class="header-section-number">2.1</span> A K=4 fixé</a></li>
   <li><a href="#choix-du-nombre-de-classes" id="toc-choix-du-nombre-de-classes" class="nav-link" data-scroll-target="#choix-du-nombre-de-classes"><span class="header-section-number">2.2</span> Choix du nombre de classes</a></li>
+  <li><a href="#kmeans-sur-les-coordonnées-de-lacp" id="toc-kmeans-sur-les-coordonnées-de-lacp" class="nav-link" data-scroll-target="#kmeans-sur-les-coordonnées-de-lacp"><span class="header-section-number">2.3</span> Kmeans sur les coordonnées de l’ACP</a></li>
   </ul></li>
   <li><a href="#classification-avec-lalgorithme-pam" id="toc-classification-avec-lalgorithme-pam" class="nav-link" data-scroll-target="#classification-avec-lalgorithme-pam"><span class="header-section-number">3</span> Classification avec l’algorithme PAM</a></li>
   <li><a href="#pour-aller-plus-loin-classification-avec-lalgorithme-fuzzy-c-means" id="toc-pour-aller-plus-loin-classification-avec-lalgorithme-fuzzy-c-means" class="nav-link" data-scroll-target="#pour-aller-plus-loin-classification-avec-lalgorithme-fuzzy-c-means"><span class="header-section-number">4</span> Pour aller plus loin : Classification avec l’algorithme fuzzy c-means</a>
@@ -214,30 +215,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(circlize)</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggalluvial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="prise-en-main-des-données-de-vins" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Prise en main des données de vins</h1>
+<section id="prise-en-main-des-données-datagym3mic" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Prise en main des données DataGym3MIC</h1>
 <section id="lecture-des-données" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="lecture-des-données"><span class="header-section-number">1.1</span> Lecture des données</h2>
-<p>Dans ce TP, on va utiliser le jeu de données <code>wine</code> disponible sur la page moodle du cours.</p>
-<p>Ce jeu de données comprend des mesures physico-chimiques réalisées sur un échantillon de <span class="math inline">\(n=600\)</span> vins (rouges et blancs) du Portugal. Ces mesures sont complétées par une évaluation sensorielle de la qualité par un ensemble d’experts. Chaque vin est décrit par les variables suivantes :</p>
+<p>Dans ce TP, on va utiliser le jeu de données <code>DataGym3MIC</code> disponible sur la page moodle du cours.</p>
+<p>Ce jeu de données fournit un aperçu détaillé des routines d’exercice, des attributs physiques et des mesures de la condition physique de <span class="math inline">\(n=973\)</span> membres d’une salle de sport. Chaque membre est décrit par les variables suivantes :</p>
 <ul>
-<li>Qualite : son évaluation sensorielle par les experts (<em>bad</em>,<em>medium</em>,<em>good</em>),</li>
-<li>Type : son type (1 pour un vin rouge, 0 pour un vin blanc),</li>
-<li>AcidVol : la teneur en acide volatile (en g/dm3 d’acide acétique),</li>
-<li>AcidCitr : la teneur en acide citrique (en g/dm3),</li>
-<li>SO2lbr : le dosage du dioxyde de soufre libre (en mg/dm3),</li>
-<li>SO2tot : le dosage du dioxyde de soufre total (en mg/dm3),</li>
-<li>Densite : la densité (en g/cm3),</li>
-<li>Alcool : le degré d’alcool (en % Vol.).</li>
+<li>gender : son sexe (<em>Female</em> pour une femme, <em>Male</em> pour un homme),</li>
+<li>weight : son poids (en kg),</li>
+<li>height : sa taille (en m),</li>
+<li>duration : la durée de chaque séance d’entraînement (en heures),</li>
+<li>calories : le total des calories brûlées au cours de chaque séance,</li>
+<li>fat : son pourcentage de graisse corporelle,</li>
+<li>water : sa consommation quotidienne d’eau pendant les séances d’entraînement (en litres),</li>
+<li>level : son niveau d’expérience, de débutant (1) à expert (3),</li>
+<li>bmi : son indice de masse corporelle (IMC), calculé à partir de la taille et du poids.</li>
 </ul>
-<p><strong>Question 1.</strong> Récupérez sur moodle le jeu de données <code>wine.txt</code> et chargez-le sous R.</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-2_0e44fb1c313b74ce5bbca475379c6ebd">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wine <span class="ot">&lt;-</span><span class="fu">read.table</span>(.......)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Question 1.</strong> Récupérez sur moodle le jeu de données <code>DataGym3MIC.txt</code> et chargez-le sous R.</p>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-2_1439bbfde38067dcfa9f95902a697c47">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gym <span class="ot">&lt;-</span><span class="fu">read.table</span>(.......)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Vérifiez la nature des variables à l’aide de la fonction <code>str()</code>. Modifiez si nécessaire les variables qualitatives (à l’aide de <code>as.factor()</code>) et transformez les modalités “1” et “0” de la variable <code>Type</code>en “rouge” et “blanc” respectivement (à l’aide de la fonction <code>factor()</code>).</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-3_4fbf37cbc26b25d885baf980f87bb96b">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>wine<span class="sc">$</span>Qualite <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(....)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>wine<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="fu">factor</span>(..., <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"blanc"</span>,<span class="st">"rouge"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Vérifiez la nature des variables à l’aide de la fonction <code>str()</code>. Déclarez les variables qualitatives à l’aide de la fonction <code>as.factor()</code>. Transformez les modalités “1”, “2” et “3” de la variable <code>level</code> en “debutant”, “interm” et “expert” respectivement.</p>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-3_8be39bb31a8afcd807e227b78d85cbe1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gym<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(...)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gym<span class="sc">$</span>level <span class="ot">&lt;-</span> <span class="fu">factor</span>(..., <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"debutant"</span>,<span class="st">"interm"</span>,<span class="st">"expert"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="statistiques-descriptives-avec-r" class="level2" data-number="1.2">
@@ -246,14 +248,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-4_db5b385f4646940bd5b47245437199d7">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A completer - Stat. descriptives</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-5_1692397943bb422d9afdceeb534a864d">
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-5_d4bdf4104f8f43f1be869d854a59863e">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ACP A completer</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>resacp<span class="ot">&lt;-</span><span class="fu">PCA</span>(wine,<span class="at">quali.sup=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">scale.unit =</span> <span class="cn">TRUE</span>,<span class="at">graph=</span><span class="cn">FALSE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>resacp<span class="ot">&lt;-</span><span class="fu">PCA</span>(gym,<span class="at">quali.sup=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>), <span class="at">scale.unit =</span> <span class="cn">TRUE</span>,<span class="at">graph=</span><span class="cn">FALSE</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_eig</span>(...)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(...)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_var</span>(...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Pour la suite, on va utiliser les variables quantitatives pour faire de la classification non supervisée des vins. Les variables <strong>Qualite</strong> et <strong>Type</strong> seront utilisées comme des variables extérieures pour comparer / croiser avec les classifications obtenues pour l’interprétation.</p>
+<p><strong>Question :</strong> Pour la suite, on va utiliser les variables quantitatives pour faire de la classification non supervisée des membres de la salle de sport. Les variables <strong>gender</strong> et <strong>level</strong> seront utilisées comme des variables extérieures pour comparer / croiser avec les classifications obtenues pour l’interprétation.</p>
 <p>Pensez-vous qu’il est nécessaire de transformer les variables quantitatives dans l’objectif de clustering avec un algorithme des Kmeans ? Si oui, mettez en place cette transformation.</p>
 <div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-6_cac9270117985761ce5247225d388789">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A completer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -262,47 +264,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="classification-avec-lalgorithme-des-kmeans" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Classification avec l’algorithme des Kmeans</h1>
-<section id="a-k3-fixé" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="a-k3-fixé"><span class="header-section-number">2.1</span> A K=3 fixé</h2>
-<p><strong>Question :</strong> A l’aide de la fonction <code>kmeans()</code>, faites une classification non supervisée en <span class="math inline">\(3\)</span> classes des vins. Regardez les options disponibles dans la fonction <code>kmeans()</code>.</p>
+<section id="a-k4-fixé" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="a-k4-fixé"><span class="header-section-number">2.1</span> A K=4 fixé</h2>
+<p><strong>Question :</strong> A l’aide de la fonction <code>kmeans()</code>, faites une classification non supervisée en <span class="math inline">\(4\)</span> classes des membres. Regardez les options disponibles dans la fonction <code>kmeans()</code>.</p>
 <div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-7_13d1e339041f9e7d4d0d280fc2bb8872">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(kmeans)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>reskmeans<span class="ot">&lt;-</span><span class="fu">kmeans</span>(....)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Combien a-t-on de vins par classe (vous pouvez vous aider de la fonction <code>table()</code>) ? Visualisez la classification obtenue dans les premiers plans de l’ACP (vous pouvez utiliser la fonction <code>PCA()</code> de la librairie <code>FactoMineR</code> et la fonction <code>fviz_cluster()</code> de la librairie <code>factoextra</code>).</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-8_4ef3165a12018d518deef53bc0f8a82d">
+<p><strong>Question : </strong> Combien a-t-on de membres par classe (vous pouvez vous aider de la fonction <code>table()</code>) ? Visualisez la classification obtenue dans les premiers plans de l’ACP (vous pouvez utiliser la fonction <code>PCA()</code> de la librairie <code>FactoMineR</code> et la fonction <code>fviz_cluster()</code> de la librairie <code>factoextra</code>).</p>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-8_0c80d15d8ad6bbb1a17b42492a3a17f7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(....)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(reskmeans,<span class="at">data=</span>wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(reskmeans,<span class="at">data=</span>gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)],</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">ellipse.type=</span><span class="st">"norm"</span>,<span class="at">labelsize=</span><span class="dv">8</span>,</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>))<span class="sc">+</span><span class="fu">ggtitle</span>(<span class="st">""</span>)</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(resacp,<span class="at">col.ind=</span><span class="fu">as.factor</span>(reskmeans<span class="sc">$</span>cluster),</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom =</span> <span class="fu">c</span>(<span class="st">"point"</span>),<span class="at">axes=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> La classification obtenue précédemment a-t-elle un lien avec le type de vins ? Avec la qualité du vin ? Vous pouvez vous aider de la fonction <code>table()</code>, la fonction <code>adjustedRandIndex()</code> de la librairie <code>mclust</code>, …</p>
+<p><strong>Question : </strong> La classification obtenue précédemment a-t-elle un lien avec le sexe des membres ? Avec leur niveau d’expérience ? Vous pouvez vous aider de la fonction <code>table()</code>, la fonction <code>adjustedRandIndex()</code> de la librairie <code>mclust</code>, …</p>
 <div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-9_99a7259a63bedef2b58b0c9076ab9655">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(...,... )</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustedRandIndex</span>(...,...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-10_d85d66553cd6f78cab237801650af5b1">
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-10_69550c143ce72d0c1820aeb70bd6a336">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>clust<span class="ot">&lt;-</span><span class="fu">paste</span>(<span class="st">"Cl-K"</span>,reskmeans<span class="sc">$</span>cluster,<span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Tab<span class="ot">&lt;-</span><span class="fu">melt</span>(<span class="fu">table</span>(clust,wine[,<span class="dv">1</span>]))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Tab<span class="ot">&lt;-</span><span class="fu">melt</span>(<span class="fu">table</span>(clust,gym<span class="sc">$</span>level))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Tab,<span class="fu">aes</span>(<span class="at">y=</span>value,<span class="at">axis1=</span>clust,<span class="at">axis2=</span>Var2))<span class="sc">+</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill=</span>clust))<span class="sc">+</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>(<span class="at">width =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>)<span class="sc">+</span>   </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>(<span class="at">width =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>)<span class="sc">+</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">"stratum"</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)))<span class="sc">+</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">chordDiagram</span>(<span class="fu">table</span>(clust,wine[,<span class="dv">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">chordDiagram</span>(<span class="fu">table</span>(clust,gym<span class="sc">$</span>gender))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="choix-du-nombre-de-classes" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="choix-du-nombre-de-classes"><span class="header-section-number">2.2</span> Choix du nombre de classes</h2>
 <p><strong>Question :</strong> On s’intéresse dans cette section au choix du nombre de classes <span class="math inline">\(K\)</span> en étudiant l’évolution de l’inertie intraclasse. En faisant varier <span class="math inline">\(K\)</span> entre 2 et 15, calculez l’inertie intraclasse associée à chaque classification obtenue. Tracez l’évolution de l’inertie intraclasse en fonction du nombre de classes. Qu’en concluez-vous ?</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-11_cc0f21d39e23d39ed3cdfd4ed9bb1952">
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-11_9b2deb9708a7e109c4ad92388d667829">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A completer</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Kmax<span class="ot">&lt;-</span><span class="dv">15</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>reskmeanscl<span class="ot">&lt;-</span><span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="fu">nrow</span>(wine),<span class="at">ncol=</span>Kmax<span class="dv">-1</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>reskmeanscl<span class="ot">&lt;-</span><span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="fu">nrow</span>(gym),<span class="at">ncol=</span>Kmax<span class="dv">-1</span>)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>Iintra<span class="ot">&lt;-</span><span class="cn">NULL</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>Kmax){</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  resaux<span class="ot">&lt;-</span><span class="fu">kmeans</span>(...)</span>
@@ -318,11 +320,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Inertie intraclasse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Question :</strong> Reprendre la question du choix du nombre de classes en utilisant le critère silhouette (vous pouvez vous aider de la fonction <code>silhouette()</code>). Pour la classification sélectionnée, représentez les poids <span class="math inline">\(s(i)\)</span> de chaque individu à l’aide de la fonction <code>fviz_silhouette()</code>.</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-12_417152c190553afbd2e63e5ecb8e4cd7">
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-12_068c63bc3e1c097fda2f76d88ff79056">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Silhou<span class="ot">&lt;-</span><span class="cn">NULL</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>Kmax){</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>   aux<span class="ot">&lt;-</span><span class="fu">silhouette</span>(reskmeanscl[,k<span class="dv">-1</span>], <span class="fu">daisy</span>(wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>   aux<span class="ot">&lt;-</span><span class="fu">silhouette</span>(reskmeanscl[,k<span class="dv">-1</span>], <span class="fu">daisy</span>(gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)]))</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>   Silhou<span class="ot">&lt;-</span><span class="fu">c</span>(Silhou,<span class="fu">mean</span>(aux[,<span class="dv">3</span>]))</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
@@ -337,55 +339,81 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(df,Silhou,aux)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="kmeans-sur-les-coordonnées-de-lacp" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="kmeans-sur-les-coordonnées-de-lacp"><span class="header-section-number">2.3</span> Kmeans sur les coordonnées de l’ACP</h2>
+<p>On s’intéresse maintenant à une autre stratégie : appliquer l’algorithme des Kmeans non plus sur les variables quantitatives centrées réduites, mais sur les coordonnées des individus dans les premiers axes de l’ACP centrée réduite (objet <code>resacp</code> de la section 1.2).</p>
+<p><strong>Question :</strong> Déterminez une classification des membres par l’algorithme des Kmeans à partir des coordonnées des individus sur les composantes principales retenues de l’ACP. Vous déterminerez le nombre de classes à l’aide de l’inertie intraclasse et du critère silhouette, pour <span class="math inline">\(K\)</span> variant entre 2 et 15. Représentez la classification retenue dans le premier plan factoriel de l’ACP.</p>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-13_f21e3445e226ac4f53086b5ecd4bce4e">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>CoordACP<span class="ot">&lt;-</span>resacp<span class="sc">$</span>ind<span class="sc">$</span>coord[,...]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>Kmax<span class="ot">&lt;-</span><span class="dv">15</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>reskmeansACPcl<span class="ot">&lt;-</span><span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="fu">nrow</span>(gym),<span class="at">ncol=</span>Kmax<span class="dv">-1</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>IintraACP<span class="ot">&lt;-</span><span class="cn">NULL</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>SilhouACP<span class="ot">&lt;-</span><span class="cn">NULL</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>Kmax){</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  resaux<span class="ot">&lt;-</span><span class="fu">kmeans</span>(...)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  reskmeansACPcl[,k<span class="dv">-1</span>]<span class="ot">&lt;-</span>...</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  IintraACP<span class="ot">&lt;-</span><span class="fu">c</span>(IintraACP,...)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  aux<span class="ot">&lt;-</span><span class="fu">silhouette</span>(...)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  SilhouACP<span class="ot">&lt;-</span><span class="fu">c</span>(SilhouACP,...)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question :</strong> Comparez cette classification avec celle retenue dans la section précédente (Kmeans sur les données centrées réduites). Commentez.</p>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-14_787fb0492bca257e204d11d79e87681f">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(...,...)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustedRandIndex</span>(...,...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 <section id="classification-avec-lalgorithme-pam" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Classification avec l’algorithme PAM</h1>
-<p><strong>Question :</strong> Déterminez une classification en <span class="math inline">\(K=3\)</span> classes des vins en utilisant la méthode PAM et représentez graphiquement la classification obtenue. A-t-elle un lien avec le type de vins ? Avec la qualité ? Avec la classification en <span class="math inline">\(K=3\)</span> classes obtenue avec la méthode des Kmeans?</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-13_b84eb793812a5cc4020f36362aef3987">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>resPAM<span class="ot">&lt;-</span><span class="fu">pam</span>(...,<span class="at">k=</span>...,<span class="at">metric=</span>...)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>resPAM<span class="sc">$</span>medoids</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>resPAM<span class="sc">$</span>id.med</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(resPAM,<span class="at">data=</span>wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">ellipse.type=</span><span class="st">"norm"</span>,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">labelsize=</span><span class="dv">8</span>,</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>))<span class="sc">+</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>             <span class="fu">ggtitle</span>(<span class="st">""</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(resacp,</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.ind=</span><span class="fu">as.factor</span>(resPAM<span class="sc">$</span>clustering),</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom =</span> <span class="fu">c</span>(<span class="st">"point"</span>),</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">axes=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustedRandIndex</span>(... , ...)</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(... , ....)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Question :</strong> Déterminez une classification en <span class="math inline">\(K=3\)</span> classes des membres en utilisant la méthode PAM et représentez graphiquement la classification obtenue. A-t-elle un lien avec le sexe ? Avec le niveau d’expérience ? Avec la classification en <span class="math inline">\(K=3\)</span> classes obtenue avec la méthode des Kmeans?</p>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-15_7ec74115eecb48271cef6272c0831533">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>resPAM<span class="ot">&lt;-</span><span class="fu">pam</span>(...,<span class="at">k=</span>...,<span class="at">metric=</span>...)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>resPAM<span class="sc">$</span>medoids</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>resPAM<span class="sc">$</span>id.med</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(resPAM,<span class="at">data=</span>gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)],</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">ellipse.type=</span><span class="st">"norm"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">labelsize=</span><span class="dv">8</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>))<span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>             <span class="fu">ggtitle</span>(<span class="st">""</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(resacp,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.ind=</span><span class="fu">as.factor</span>(resPAM<span class="sc">$</span>clustering),</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom =</span> <span class="fu">c</span>(<span class="st">"point"</span>),</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">axes=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustedRandIndex</span>(... , ...)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(... , ....)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Question :</strong> Déterminez le nombre de classes optimal par le critère Silhouette pour <span class="math inline">\(K\)</span> variant entre <span class="math inline">\(2\)</span> et <span class="math inline">\(15\)</span> avec l’algorithme PAM. Commentez la classification retenue. Est-elle proche de celle obtenue avec l’algorithme des Kmeans ?</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-14_4055f2a6bce5509f9dff92c8539ea9d6">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A compléter</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>Kmax<span class="ot">&lt;-</span><span class="dv">15</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>resPAMcl<span class="ot">&lt;-</span><span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="fu">nrow</span>(wine),<span class="at">ncol=</span>Kmax<span class="dv">-1</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>Silhou<span class="ot">&lt;-</span><span class="cn">NULL</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>Kmax){</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  resaux<span class="ot">&lt;-</span><span class="fu">pam</span>(.....)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  resPAMcl[,k<span class="dv">-1</span>]<span class="ot">&lt;-</span>resaux<span class="sc">$</span>clustering</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  aux<span class="ot">&lt;-</span><span class="fu">silhouette</span>(resPAMcl[,k<span class="dv">-1</span>], <span class="fu">daisy</span>(wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]))</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  Silhou<span class="ot">&lt;-</span><span class="fu">c</span>(Silhou,......)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">K=</span><span class="dv">2</span><span class="sc">:</span>Kmax,<span class="at">Silhouette=</span>Silhou)</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df,<span class="fu">aes</span>(<span class="at">x=</span>K,<span class="at">y=</span>Silhouette))<span class="sc">+</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span><span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>aux<span class="ot">&lt;-</span><span class="fu">silhouette</span>(resPAMcl[,<span class="dv">1</span>], <span class="fu">daisy</span>(wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)]))</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_silhouette</span>(aux)<span class="sc">+</span><span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span><span class="dv">9</span>))</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustedRandIndex</span>(.....)</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(.....)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-16_ac682e5ba7fe0078fc19d2e7c6bb025c">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A compléter</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>Kmax<span class="ot">&lt;-</span><span class="dv">15</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>resPAMcl<span class="ot">&lt;-</span><span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="fu">nrow</span>(gym),<span class="at">ncol=</span>Kmax<span class="dv">-1</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>Silhou<span class="ot">&lt;-</span><span class="cn">NULL</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>Kmax){</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  resaux<span class="ot">&lt;-</span><span class="fu">pam</span>(.....)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  resPAMcl[,k<span class="dv">-1</span>]<span class="ot">&lt;-</span>resaux<span class="sc">$</span>clustering</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  aux<span class="ot">&lt;-</span><span class="fu">silhouette</span>(resPAMcl[,k<span class="dv">-1</span>], <span class="fu">daisy</span>(gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)]))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  Silhou<span class="ot">&lt;-</span><span class="fu">c</span>(Silhou,......)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">K=</span><span class="dv">2</span><span class="sc">:</span>Kmax,<span class="at">Silhouette=</span>Silhou)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df,<span class="fu">aes</span>(<span class="at">x=</span>K,<span class="at">y=</span>Silhouette))<span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span><span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>aux<span class="ot">&lt;-</span><span class="fu">silhouette</span>(resPAMcl[,...], <span class="fu">daisy</span>(gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)]))</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_silhouette</span>(aux)<span class="sc">+</span><span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span><span class="dv">9</span>))</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustedRandIndex</span>(.....)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(.....)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="pour-aller-plus-loin-classification-avec-lalgorithme-fuzzy-c-means" class="level1" data-number="4">
@@ -414,29 +442,29 @@ m_k^{(r)} = \frac{\underset{i=1}{\stackrel{n}{\sum}} (\omega_{ik}^{(r-1)})^\gamm
 <p>En général, la puissance choisie sur les poids est <span class="math inline">\(\gamma=2\)</span>. Dans le cas <span class="math inline">\(\gamma=1\)</span>, on retrouve l’algorithme des Kmeans.</p>
 <p>Nous allons ici nous appuyer sur la fonction <code>fcm()</code> de la librairie <code>ppclust</code>.</p>
 <p><strong>Question :</strong> Utilisez cet algorithme pour obtenir une classification en <span class="math inline">\(3\)</span> classes. Comment sont initialisés les poids ? Comment est obtenue la classification finale ? A l’aide des poids, étudiez la stabilité des classes. Vous pouvez pour cela étudier les poids des individus par classe.</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-15_312f0aa0ad5a4f9fef8ee2464979b989">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ppclust)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>resfcm<span class="ot">&lt;-</span><span class="fu">fcm</span>(....,<span class="at">centers=</span> ... , <span class="at">m=</span><span class="dv">2</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(.....)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>Aux<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">cluster=</span><span class="fu">as.factor</span>(resfcm<span class="sc">$</span>cluster),</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">PoidsMax=</span><span class="fu">apply</span>(resfcm<span class="sc">$</span>u,<span class="dv">1</span>,max))</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Aux,<span class="fu">aes</span>(<span class="at">x=</span>cluster,<span class="at">y=</span>PoidsMax))<span class="sc">+</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-17_c3a5165b072b0c2ddc47d7a37cb52faa">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ppclust)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>resfcm<span class="ot">&lt;-</span><span class="fu">fcm</span>(....,<span class="at">centers=</span> ... , <span class="at">m=</span><span class="dv">2</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(.....)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>Aux<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">cluster=</span><span class="fu">as.factor</span>(resfcm<span class="sc">$</span>cluster),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">PoidsMax=</span><span class="fu">apply</span>(resfcm<span class="sc">$</span>u,<span class="dv">1</span>,max))</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Aux,<span class="fu">aes</span>(<span class="at">x=</span>cluster,<span class="at">y=</span>PoidsMax))<span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Question :</strong> Représentez la classification obtenue sur le premier plan de l’ACP en nuançant selon les poids.</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-16_53159fdf0d1345ec42714d7439f10f78">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(resacp,<span class="at">axes=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>),</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.ind=</span><span class="fu">apply</span>(....................))<span class="sc">+</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradient2</span>(<span class="at">low=</span><span class="st">"white"</span>, <span class="at">mid=</span><span class="st">"blue"</span>,<span class="at">high=</span><span class="st">"red"</span>, </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">midpoint=</span><span class="fl">0.8</span>, <span class="at">space =</span> <span class="st">"Lab"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-18_c6865101a5d525a074df3aa150a50d44">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(resacp,<span class="at">axes=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.ind=</span><span class="fu">apply</span>(....................))<span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradient2</span>(<span class="at">low=</span><span class="st">"white"</span>, <span class="at">mid=</span><span class="st">"blue"</span>,<span class="at">high=</span><span class="st">"red"</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">midpoint=</span><span class="fl">0.8</span>, <span class="at">space =</span> <span class="st">"Lab"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question</strong> : Comparez les classifications obtenues avec Kmeans et fuzzy c-means. Commentez.</p>
-<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-17_3da8a4eba69030d05503b445ca8e7cf3">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Question </strong>: Comparez les classifications obtenues avec Kmeans et fuzzy c-means. Commentez.</p>
+<div class="cell" data-hash="TP4-Kmeans-Sujet_cache/html/unnamed-chunk-19_d69ffbf1dc3496b72256c8fbe42b045a">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

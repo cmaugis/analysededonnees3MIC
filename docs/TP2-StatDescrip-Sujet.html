@@ -195,45 +195,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>Ce TP a pour objectif de mener l’étude descriptive uni- et bi-dimensionnelle du jeu de données <code>wine</code> disponible sous Moodle. Vous rédigerez les réponses et vos observations dans le script en .qmd du TP au fur et à mesure. Vous pourrez compiler votre script à la fin du TP pour obtenir un compte-rendu du TP.</p>
+<p>Ce TP a pour objectif de mener l’étude descriptive uni- et bi-dimensionnelle du jeu de données <code>DataGym3MIC</code> disponible sous Moodle. Vous rédigerez les réponses et vos observations dans le script en .qmd du TP au fur et à mesure. Vous pourrez compiler votre script à la fin du TP pour obtenir un compte-rendu du TP.</p>
 <p><em>Remarque : pensez à enlever les “#|eval: false” au fur et à mesure de l’avancement dans le TP pour avoir les résultats dans votre compte-rendu final de TP.</em></p>
 <section id="données" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Données</h1>
-<p>On va étudier le jeu de données <strong>wine</strong> disponible sur la page moodle du cours.</p>
+<p>On va étudier le jeu de données <strong>DataGym3MIC</strong> disponible sur la page moodle du cours.</p>
 <p>Commencez par récupérer ce jeu de données et sauvegardez le fichier dans votre dossier de travail. Chargez le jeu de données à l’aide de la fonction <code>read.table()</code> :</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-2_adc35427a602703e6d6d7941c2eb632d">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>wine <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"wine.txt"</span>,<span class="at">header=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-2_acfae68eb9566643cf1ff9a761d1d258">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gym <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"DataGym3MIC.txt"</span>,<span class="at">header=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Vous pouvez voir les premières lignes du jeu de données à l’aide de la fonction <code>head()</code> :</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-3_42e3b2ab1ffaed0138c623cbcdf5def8">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-3_4fc9e9d8984881f24cf641d9b1fa70f4">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gym)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     Qualite Type AcidVol AcidCitr SO2lbr SO2tot Densite Alcool
-1352  medium    1    0.62     0.01      8     46 0.99332   11.8
-5493  medium    0    0.34     0.10     17     63 0.99370    9.2
-5153  medium    0    0.22     0.22     39    110 0.99855    9.0
-5308  medium    0    0.35     0.46     61    183 0.99786    9.0
-3866  medium    0    0.42     0.32     20    167 0.99479   10.6
-694   medium    1    0.48     0.32     21    122 0.99840    9.4</code></pre>
+<pre><code>  gender weight height duration calories  fat water level   bmi
+1   Male   88.3   1.71     1.69     1313 12.6   3.5     3 30.20
+2 Female   74.9   1.53     1.30      883 33.9   2.1     2 32.00
+3 Female   68.1   1.66     1.11      677 33.4   2.3     2 24.71
+4   Male   53.2   1.70     0.59      532 28.8   2.1     1 18.41
+5   Male   46.1   1.79     0.64      556 29.2   2.8     1 14.39
+6 Female   58.0   1.68     1.59     1116 15.5   2.7     3 20.55</code></pre>
 </div>
 </div>
-<p>Le jeu de données <strong>wine</strong> comprend des mesures physico-chimiques réalisées sur un échantillon de <span class="math inline">\(600\)</span> vins (rouges et blancs) du Portugal. Ces mesures sont complétées par une évaluation sensorielle de la qualité par un ensemble d’experts. Chaque vin est décrit par les variables suivantes :</p>
+<p>Le jeu de données <strong>DataGym3MIC</strong> fournit un aperçu détaillé des routines d’exercice, des attributs physiques et des mesures de la condition physique de <span class="math inline">\(973\)</span> membres d’une salle de sport. Chaque membre est décrit par les variables suivantes :</p>
 <ul>
-<li><em>Qualite</em> : son évaluation sensorielle par les experts (<em>bad</em>,<em>medium</em>,<em>good</em>),</li>
-<li><em>Type</em> : son type (1 pour un vin rouge, 0 pour un vin blanc),</li>
-<li><em>AcidVol</em> : la teneur en acide volatile (en g/dm3 d’acide acétique),</li>
-<li><em>AcidCitr</em> : la teneur en acide citrique (en g/dm3),</li>
-<li><em>SO2lbr</em> : le dosage du dioxyde de soufre libre (en mg/dm3),</li>
-<li><em>SO2tot</em> : le dosage du dioxyde de soufre total (en mg/dm3),</li>
-<li><em>Densite</em> : la densité (en g/cm3),</li>
-<li><em>Alcool</em> : le degré d’alcool (en % Vol.).</li>
+<li><em>gender</em> : son sexe (<em>Female</em> pour une femme, <em>Male</em> pour un homme),</li>
+<li><em>weight</em> : son poids (en kg),</li>
+<li><em>height</em> : sa taille (en m),</li>
+<li><em>duration</em> : la durée de chaque séance d’entraînement (en heures),</li>
+<li><em>calories</em> : le total des calories brûlées au cours de chaque séance,</li>
+<li><em>fat</em> : son pourcentage de graisse corporelle,</li>
+<li><em>water</em> : sa consommation quotidienne d’eau pendant les séances d’entraînement (en litres),</li>
+<li><em>level</em> : son niveau d’expérience, de débutant (1) à expert (3),</li>
+<li><em>bmi</em> : son indice de masse corporelle (IMC), calculé à partir de la taille et du poids.</li>
 </ul>
 <p><strong>Question :</strong> Contrôlez la dimension du jeu de données (c’est-à-dire le nombre d’individus et le nombre de variables). Vous pouvez vous aider des fonctions <code>dim()</code>, <code>nrow()</code>et <code>ncol()</code>.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-4_1a797666c6dc0b8855a45fecd8591f58">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Contrôlez que l’objet <code>wine</code> est bien de type data.frame (commande <code>is.data.frame()</code>).</p>
-<p>Remarquons que l’on peut obtenir les noms des variables grâce à la commande <code>names(wine)</code> ou <code>colnames(wine)</code>. Plus largement, on peut utiliser la commande <code>attributes()</code>.</p>
+<p><strong>Question :</strong> Contrôlez que l’objet <code>gym</code> est bien de type data.frame (commande <code>is.data.frame()</code>).</p>
+<p>Remarquons que l’on peut obtenir les noms des variables grâce à la commande <code>names(gym)</code> ou <code>colnames(gym)</code>. Plus largement, on peut utiliser la commande <code>attributes()</code>.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-5_02a0327135dedd209bb4ef7810ae98e2">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -243,42 +244,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>On voit ici que les variables sont de différentes natures :</p>
 <ul>
-<li>Les variables <em>Qualite</em> et <em>Type</em> sont des variables <em>qualitatives</em></li>
+<li>La variable <em>gender</em> est une variable <em>qualitative nominale</em></li>
+<li>La variable <em>level</em> est une variable <em>qualitative ordinale</em> (bien que codée par des entiers 1, 2, 3 dans le fichier !)</li>
 <li>Les autres variables sont <em>quantitatives</em></li>
 </ul>
-<p>Attention, il faut bien préciser à R les variables qui doivent être considérées comme qualitatives. On utilise donc la fonction <code>as.factor()</code> sur les variables <em>Qualite</em> et <em>Type</em>. On va aussi en profiter pour renommer les modalités de la variable <em>Type</em> en <code>blanc</code>et <code>rouge</code>.</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-7_faabab75aced3ed4e4d5ab1e2aee7bcf">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>wine<span class="sc">$</span>Qualite<span class="ot">&lt;-</span><span class="fu">as.factor</span>(wine<span class="sc">$</span>Qualite)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>wine<span class="sc">$</span>Type<span class="ot">&lt;-</span><span class="fu">factor</span>(wine<span class="sc">$</span>Type,<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"blanc"</span>,<span class="st">"rouge"</span>))</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Attention, il faut bien préciser à R les variables qui doivent être considérées comme qualitatives. On utilise donc la fonction <code>factor()</code> sur les variables <em>gender</em> et <em>level</em>. On va aussi en profiter pour renommer les modalités de la variable <em>gender</em> en <code>femme</code> et <code>homme</code>, et celles de la variable <em>level</em> en <code>debutant</code>, <code>interm</code> et <code>expert</code>.</p>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-7_ee59d02085f00bad1e6edfed4564e39a">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>gym<span class="sc">$</span>gender<span class="ot">&lt;-</span><span class="fu">factor</span>(gym<span class="sc">$</span>gender,<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"femme"</span>,<span class="st">"homme"</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>gym<span class="sc">$</span>level<span class="ot">&lt;-</span><span class="fu">factor</span>(gym<span class="sc">$</span>level,<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"debutant"</span>,<span class="st">"interm"</span>,<span class="st">"expert"</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gym)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     Qualite  Type AcidVol AcidCitr SO2lbr SO2tot Densite Alcool
-1352  medium rouge    0.62     0.01      8     46 0.99332   11.8
-5493  medium blanc    0.34     0.10     17     63 0.99370    9.2
-5153  medium blanc    0.22     0.22     39    110 0.99855    9.0
-5308  medium blanc    0.35     0.46     61    183 0.99786    9.0
-3866  medium blanc    0.42     0.32     20    167 0.99479   10.6
-694   medium rouge    0.48     0.32     21    122 0.99840    9.4</code></pre>
+<pre><code>  gender weight height duration calories  fat water    level   bmi
+1  homme   88.3   1.71     1.69     1313 12.6   3.5   expert 30.20
+2  femme   74.9   1.53     1.30      883 33.9   2.1   interm 32.00
+3  femme   68.1   1.66     1.11      677 33.4   2.3   interm 24.71
+4  homme   53.2   1.70     0.59      532 28.8   2.1 debutant 18.41
+5  homme   46.1   1.79     0.64      556 29.2   2.8 debutant 14.39
+6  femme   58.0   1.68     1.59     1116 15.5   2.7   expert 20.55</code></pre>
 </div>
 </div>
 <p>On peut obtenir un résumé rapide du jeu de données à l’aide de la fonction <code>summary()</code></p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-8_c3098567e03857841c70f3959a4f7677">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(wine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-8_22a5d0e5ea4045934d49950b6c9e5e81">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gym)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   Qualite       Type        AcidVol          AcidCitr          SO2lbr      
- bad   : 19   blanc:425   Min.   :0.1000   Min.   :0.0000   Min.   :  2.00  
- good  :110   rouge:175   1st Qu.:0.2400   1st Qu.:0.2400   1st Qu.: 15.75  
- medium:471               Median :0.3000   Median :0.3000   Median : 27.00  
-                          Mean   :0.3512   Mean   :0.3141   Mean   : 29.41  
-                          3rd Qu.:0.4300   3rd Qu.:0.3900   3rd Qu.: 41.00  
-                          Max.   :1.0400   Max.   :1.0000   Max.   :112.00  
-     SO2tot         Densite           Alcool     
- Min.   :  7.0   Min.   :0.9875   Min.   : 8.00  
- 1st Qu.: 68.0   1st Qu.:0.9925   1st Qu.: 9.50  
- Median :114.5   Median :0.9949   Median :10.40  
- Mean   :111.2   Mean   :0.9947   Mean   :10.49  
- 3rd Qu.:154.0   3rd Qu.:0.9970   3rd Qu.:11.30  
- Max.   :278.0   Max.   :1.0030   Max.   :14.00  </code></pre>
+<pre><code>   gender        weight           height         duration        calories     
+ femme:462   Min.   : 40.00   Min.   :1.500   Min.   :0.500   Min.   : 303.0  
+ homme:511   1st Qu.: 58.10   1st Qu.:1.620   1st Qu.:1.040   1st Qu.: 720.0  
+             Median : 70.00   Median :1.710   Median :1.260   Median : 893.0  
+             Mean   : 73.85   Mean   :1.723   Mean   :1.256   Mean   : 905.4  
+             3rd Qu.: 86.00   3rd Qu.:1.800   3rd Qu.:1.460   3rd Qu.:1076.0  
+             Max.   :129.90   Max.   :2.000   Max.   :2.000   Max.   :1783.0  
+      fat            water            level          bmi       
+ Min.   :10.00   Min.   :1.500   debutant:376   Min.   :12.32  
+ 1st Qu.:21.30   1st Qu.:2.200   interm  :406   1st Qu.:20.11  
+ Median :26.20   Median :2.600   expert  :191   Median :24.16  
+ Mean   :24.98   Mean   :2.627                  Mean   :24.91  
+ 3rd Qu.:29.30   3rd Qu.:3.100                  3rd Qu.:28.56  
+ Max.   :35.00   Max.   :3.700                  Max.   :49.84  </code></pre>
 </div>
 </div>
 </section>
@@ -287,37 +289,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Avant de commencer l’analyse uni- et bi-dimensionnelle du jeu de données, on va ici donner quelques notions sur les graphiques avec <code>ggplot2</code> pour comprendre la suite.</p>
 <p><a href="https://ggplot2.tidyverse.org/" target="_blank"><strong>ggplot2</strong></a> est une extension dédiée aux graphiques. Elle est basée sur une syntaxe particulière mais robuste et efficace pour la construction de graphiques complexes. Elle part du principe (comme tout package de <code>tidyverse</code>) que les données relatives au graphique sont stockées dans un tableau (data.frame ou tibble).</p>
 <p>Un graphique en <code>ggplot2</code> s’initialise avec la fonction <code>ggplot()</code> qui prend en argument le jeu de données étudié. Par exemple,</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-9_b49df0f32ffa12d4dba6fb231bd7ab68">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gEx <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>wine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-9_e5f761d31d0ae83ccef92b57f6ba8a46">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gEx <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>gym)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Pour l’instant, on ne voit rien mais pourtant l’objet <code>gEx</code> contient des informations:</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-10_37455602e5fb6363665463505f9eea66">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gEx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>data: Qualite, Type, AcidVol, AcidCitr, SO2lbr, SO2tot, Densite, Alcool
-  [600x8]
-faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
-    compute_layout: function
-    draw_back: function
-    draw_front: function
-    draw_labels: function
-    draw_panels: function
-    finish_data: function
-    init_scales: function
-    map_data: function
-    params: list
-    setup_data: function
-    setup_params: function
-    shrink: TRUE
-    train_scales: function
-    vars: function
-    super:  &lt;ggproto object: Class FacetNull, Facet, gg&gt;</code></pre>
+<pre><code>data: gender, weight, height, duration, calories, fat, water, level,
+  bmi [973x9]
+faceting:  &lt;empty&gt; </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(gEx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "data"        "layers"      "scales"      "guides"      "mapping"    
- [6] "theme"       "coordinates" "facet"       "plot_env"    "layout"     
-[11] "labels"     </code></pre>
+<pre><code>NULL</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>gEx<span class="sc">$</span>layers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -325,9 +310,9 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 </div>
 </div>
 <p>mais pour l’instant son <code>layers</code> est vide.</p>
-<p>On ajoute ensuite des éléments graphiques, appelés <code>geom</code>, à l’objet graphique grâce à l’opérateur <code>+</code> et on précise à l’aide de la fonction <code>aes()</code> les données à utiliser en argument du <code>geom</code>. Par exemple, si on veut tracer le nuage de points entre les variables <code>Densite</code> et <code>Alcool</code> :</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-11_aaec8732a8f729614ba0d90cd9c229d4">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wine,<span class="fu">aes</span>(<span class="at">x=</span>Densite,<span class="at">y=</span>Alcool))<span class="sc">+</span></span>
+<p>On ajoute ensuite des éléments graphiques, appelés <code>geom</code>, à l’objet graphique grâce à l’opérateur <code>+</code> et on précise à l’aide de la fonction <code>aes()</code> les données à utiliser en argument du <code>geom</code>. Par exemple, si on veut tracer le nuage de points entre les variables <code>duration</code> et <code>calories</code> :</p>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-11_e948cb962732b74fb7bcf75357a8e582">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>gym,<span class="fu">aes</span>(<span class="at">x=</span>duration,<span class="at">y=</span>calories))<span class="sc">+</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
@@ -350,25 +335,25 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 <li>pour modifier un attribut graphique de la même manière pour tous les points, on le définit en-dehors de la fonction <code>aes()</code>.</li>
 </ul>
 <p>Par exemple,</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-12_341a71b211c14250f23ce2d61b9cc37f">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wine)<span class="sc">+</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>Densite,<span class="at">y=</span>Alcool,<span class="at">color=</span>Type))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-12_743dca7d1d3ef09429ab84439406696d">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>gym)<span class="sc">+</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>duration,<span class="at">y=</span>calories,<span class="at">color=</span>level))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-13_0f5798b134765ecc2e8758bde9755585">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wine)<span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>Densite,<span class="at">y=</span>Alcool),<span class="at">color=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-13_278bfe5d3de1e0249b94983b0e1e75e5">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>gym)<span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>duration,<span class="at">y=</span>calories),<span class="at">color=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>On peut représenter plusieurs <code>geom</code> sur un même graphique simultanément, il suffit d’utiliser l’opérateur <code>+</code> pour les ajouter au fur et à mesure. Par exemple,</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-14_d9058d202135bd239659ab439ae6f9f9">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wine)<span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="fu">aes</span>(<span class="at">x=</span>Qualite,<span class="at">y=</span>Alcool))<span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>Qualite,<span class="at">y=</span>Alcool), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>,<span class="at">position=</span><span class="st">"jitter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-14_b2ff6a046b80b67209df601233e72699">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>gym)<span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="fu">aes</span>(<span class="at">x=</span>level,<span class="at">y=</span>calories))<span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>level,<span class="at">y=</span>calories), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>,<span class="at">position=</span><span class="st">"jitter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -383,12 +368,12 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 <li><code>scale_fill()</code> pour modifier les couleurs de remplissage</li>
 </ul>
 <p>Pour les couleurs, on peut spécifier un gradient de couleur sur une variable quantitative avec <code>scale_color_gradient()</code>, modifier manuellement la palette de couleur avec <code>scale_color_manual()</code>, faire appel à une palette de couleur prédéfinie (par exemple en utilisant le package <a href="&quot;https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html&quot;" target="_blank">viridis</a> avec <code>scale_color_viridis</code>, en s’appuyant sur les palettes disponibles dans <a href="https://colorbrewer2.org/#type=sequential&amp;scheme=BuGn&amp;n=3" target="_blank">ColorBrewer</a> avec <code>scale_color_brewer()</code>), …</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-15_2ed7f5e8cc40c708ed88e11a7de661cd">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wine)<span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>Alcool,<span class="at">y=</span>Densite,<span class="at">size=</span>AcidVol,<span class="at">color=</span>Type))<span class="sc">+</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="st">"Acide vol."</span>, <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.5</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="fl">1.5</span>,<span class="fl">0.2</span>)) <span class="sc">+</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"Alcool"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">8</span>,<span class="dv">16</span>)) <span class="sc">+</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="st">"Densité"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="fl">0.985</span>,<span class="fl">1.01</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-15_c2bd5e01f4ffa40dc5fdcab461c8422b">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>gym)<span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>duration,<span class="at">y=</span>calories,<span class="at">size=</span>fat,<span class="at">color=</span>gender))<span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="st">"Graisse (%)"</span>, <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">10</span>,<span class="dv">35</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"Durée (h)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="fl">0.5</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="st">"Calories"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">300</span>,<span class="dv">1800</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -410,49 +395,49 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 <h1 data-number="3"><span class="header-section-number">3</span> Etude statistique unidimensionnelle</h1>
 <section id="pour-une-variable-qualitative" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="pour-une-variable-qualitative"><span class="header-section-number">3.1</span> Pour une variable qualitative</h2>
-<p>Nous nous intéressons dans cette partie aux deux variables qualitatives <strong>Type</strong> et <strong>Qualite</strong>.</p>
-<p><strong>Question :</strong> A l’aide des commandes <code>table()</code>, <code>summary()</code> et <code>levels()</code>, donnez un résumé de la variable <strong>Type</strong>. Quels sont les modalités du facteur ?</p>
+<p>Nous nous intéressons dans cette partie aux deux variables qualitatives <strong>gender</strong> et <strong>level</strong>.</p>
+<p><strong>Question :</strong> A l’aide des commandes <code>table()</code>, <code>summary()</code> et <code>levels()</code>, donnez un résumé de la variable <strong>gender</strong>. Quels sont les modalités du facteur ?</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-16_22cfbfba1687a4ef972ed04e67d26092">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> A l’aide du code suivant, résumez graphiquement la variable <strong>Type</strong> par une représentation par secteurs ou un diagramme en barres. Interprétez les résultats.</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-17_cf789ab323b8a9aa65b8477fc46f1665">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>g1<span class="ot">&lt;-</span><span class="fu">ggplot</span>(wine, <span class="fu">aes</span>(<span class="at">x=</span>Type))<span class="sc">+</span> </span>
+<p><strong>Question :</strong> A l’aide du code suivant, résumez graphiquement la variable <strong>gender</strong> par une représentation par secteurs ou un diagramme en barres. Interprétez les résultats.</p>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-17_fcf31bcdb456cb2995c2b5154962d0aa">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>g1<span class="ot">&lt;-</span><span class="fu">ggplot</span>(gym, <span class="fu">aes</span>(<span class="at">x=</span>gender))<span class="sc">+</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()<span class="sc">+</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">""</span>)<span class="sc">+</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Effectifs"</span>)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>g2<span class="ot">&lt;-</span><span class="fu">ggplot</span>(wine, <span class="fu">aes</span>(<span class="at">x =</span> Type)) <span class="sc">+</span>  </span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> (..count..)<span class="sc">/</span><span class="fu">sum</span>(..count..)))<span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>g2<span class="ot">&lt;-</span><span class="fu">ggplot</span>(gym, <span class="fu">aes</span>(<span class="at">x =</span> gender)) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> (<span class="fu">after_stat</span>(count))<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">after_stat</span>(count))))<span class="sc">+</span></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">""</span>)<span class="sc">+</span></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Frequences"</span>)</span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group =</span> <span class="fu">levels</span>(wine<span class="sc">$</span>Type),</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">value =</span> <span class="fu">as.vector</span>(<span class="fu">table</span>(wine<span class="sc">$</span>Type))<span class="sc">/</span><span class="fu">nrow</span>(wine))</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group =</span> <span class="fu">levels</span>(gym<span class="sc">$</span>gender),</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">value =</span> <span class="fu">as.vector</span>(<span class="fu">table</span>(gym<span class="sc">$</span>gender))<span class="sc">/</span><span class="fu">nrow</span>(gym))</span>
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>g3<span class="ot">&lt;-</span><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span>value, <span class="at">fill=</span>group))<span class="sc">+</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">stat =</span> <span class="st">"identity"</span>)<span class="sc">+</span> </span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start=</span><span class="dv">0</span>)<span class="sc">+</span> </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">stat =</span> <span class="st">"identity"</span>)<span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start=</span><span class="dv">0</span>)<span class="sc">+</span></span>
 <span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"bottom"</span>)</span>
 <span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(g3,g1,g2,<span class="at">ncol=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><strong>Question :</strong> La variable <strong>Qualite</strong> est une variable qualitative ordinale. On peut donc utiliser les effectifs cumulés et les fréquences cumulées. Pour tracer les fréquences cumulées, il faut que l’ordre des modalités soit bien compris par R. Ici, on commence par réorganiser les modalités en <em>bad</em>, <em>medium</em> et <em>good</em>. A l’aide des codes suivants, étudiez la variable <strong>Qualite</strong>.</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-18_096330d01a56a54266aa541671020441">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>wine<span class="sc">$</span>Qualite <span class="ot">&lt;-</span> <span class="fu">fct_relevel</span>(wine<span class="sc">$</span>Qualite,<span class="st">"bad"</span>,<span class="st">"medium"</span>,<span class="st">"good"</span>)</span>
+<p><strong>Question :</strong> La variable <strong>level</strong> est une variable qualitative ordinale. On peut donc utiliser les effectifs cumulés et les fréquences cumulées. Pour tracer les fréquences cumulées, il faut que l’ordre des modalités soit bien compris par R. Ici, on s’assure que les modalités sont bien ordonnées en <em>debutant</em>, <em>interm</em> et <em>expert</em> (c’est déjà le cas ici, mais la fonction <code>fct_relevel()</code> permet de réorganiser les modalités si besoin). A l’aide des codes suivants, étudiez la variable <strong>level</strong>.</p>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-18_b3215b86f2cf83924c2255a6d6eb7168">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>gym<span class="sc">$</span>level <span class="ot">&lt;-</span> <span class="fu">fct_relevel</span>(gym<span class="sc">$</span>level,<span class="st">"debutant"</span>,<span class="st">"interm"</span>,<span class="st">"expert"</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>EffQual<span class="ot">=</span><span class="fu">as.vector</span>(<span class="fu">table</span>(wine<span class="sc">$</span>Qualite))</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>FreqQual<span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Eff =</span> EffQual, </span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Freq =</span> EffQual<span class="sc">/</span><span class="fu">length</span>(wine<span class="sc">$</span>Qualite),   <span class="at">FreqCumul=</span><span class="fu">cumsum</span>(EffQual)<span class="sc">/</span><span class="fu">length</span>(wine<span class="sc">$</span>Qualite))</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(FreqQual)<span class="ot">&lt;-</span><span class="fu">levels</span>(wine<span class="sc">$</span>Qualite)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>EffLevel<span class="ot">=</span><span class="fu">as.vector</span>(<span class="fu">table</span>(gym<span class="sc">$</span>level))</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>FreqLevel<span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Eff =</span> EffLevel,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Freq =</span> EffLevel<span class="sc">/</span><span class="fu">length</span>(gym<span class="sc">$</span>level),   <span class="at">FreqCumul=</span><span class="fu">cumsum</span>(EffLevel)<span class="sc">/</span><span class="fu">length</span>(gym<span class="sc">$</span>level))</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(FreqLevel)<span class="ot">&lt;-</span><span class="fu">levels</span>(gym<span class="sc">$</span>level)</span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(FreqQual, </span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">'Description de la variable Qualite'</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(FreqLevel,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">'Description de la variable level'</span>,</span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
-<caption>Description de la variable Qualite</caption>
+<caption>Description de la variable level</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -463,46 +448,46 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">bad</td>
-<td style="text-align: right;">19</td>
-<td style="text-align: right;">0.032</td>
-<td style="text-align: right;">0.032</td>
+<td style="text-align: left;">debutant</td>
+<td style="text-align: right;">376</td>
+<td style="text-align: right;">0.386</td>
+<td style="text-align: right;">0.386</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">medium</td>
-<td style="text-align: right;">471</td>
-<td style="text-align: right;">0.785</td>
-<td style="text-align: right;">0.817</td>
+<td style="text-align: left;">interm</td>
+<td style="text-align: right;">406</td>
+<td style="text-align: right;">0.417</td>
+<td style="text-align: right;">0.804</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">good</td>
-<td style="text-align: right;">110</td>
-<td style="text-align: right;">0.183</td>
+<td style="text-align: left;">expert</td>
+<td style="text-align: right;">191</td>
+<td style="text-align: right;">0.196</td>
 <td style="text-align: right;">1.000</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-19_27570d1a346c3b8a0503415db94092b4">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Qualite =</span> <span class="fu">levels</span>(wine<span class="sc">$</span>Qualite), </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">value =</span> <span class="fu">table</span>(wine<span class="sc">$</span>Qualite),</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">valuecumul =</span> <span class="dv">100</span> <span class="sc">*</span><span class="fu">cumsum</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(wine<span class="sc">$</span>Qualite))))</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Qualite <span class="ot">&lt;-</span> <span class="fu">fct_relevel</span>(df<span class="sc">$</span>Qualite, <span class="st">"bad"</span>, <span class="st">"medium"</span>, <span class="st">"good"</span>)</span>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-19_31cf388a8edfa245276724b7ab162521">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">level =</span> <span class="fu">levels</span>(gym<span class="sc">$</span>level),</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">value =</span> <span class="fu">table</span>(gym<span class="sc">$</span>level),</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">valuecumul =</span> <span class="dv">100</span> <span class="sc">*</span><span class="fu">cumsum</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(gym<span class="sc">$</span>level))))</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>level <span class="ot">&lt;-</span> <span class="fu">fct_relevel</span>(df<span class="sc">$</span>level, <span class="st">"debutant"</span>, <span class="st">"interm"</span>, <span class="st">"expert"</span>)</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(df, <span class="at">freq =</span> df<span class="sc">$</span>value.Freq<span class="sc">/</span><span class="fu">nrow</span>(wine))</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wine) <span class="sc">+</span> </span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> Qualite)) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(df, <span class="at">freq =</span> df<span class="sc">$</span>value.Freq<span class="sc">/</span><span class="fu">nrow</span>(gym))</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gym) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> level)) <span class="sc">+</span></span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Effectifs"</span>)<span class="sc">+</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Qualite"</span>)</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wine) <span class="sc">+</span> </span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> Qualite, <span class="at">y =</span> ..prop.., <span class="at">group =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"level"</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gym) <span class="sc">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> level, <span class="at">y =</span> <span class="fu">after_stat</span>(prop), <span class="at">group =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
 <span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Frequences"</span>)<span class="sc">+</span></span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Qualite"</span>)</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Qualite, <span class="at">y =</span> valuecumul))<span class="sc">+</span> </span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"level"</span>)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> level, <span class="at">y =</span> valuecumul))<span class="sc">+</span></span>
 <span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>)<span class="sc">+</span></span>
 <span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Fréquences cumulées"</span>)</span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>g4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> freq, <span class="at">fill =</span> Qualite))<span class="sc">+</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>g4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> freq, <span class="at">fill =</span> level))<span class="sc">+</span></span>
 <span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">stat =</span> <span class="st">"identity"</span>)<span class="sc">+</span></span>
 <span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start =</span> <span class="dv">0</span>)</span>
 <span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(g1, g2, g3, g4, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -513,14 +498,14 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 </section>
 <section id="pour-une-variable-quantitative" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="pour-une-variable-quantitative"><span class="header-section-number">3.2</span> Pour une variable quantitative</h2>
-<p>Pour cette section, on se focalise sur la variable <strong>Alcool</strong>.</p>
+<p>Pour cette section, on se focalise sur la variable <strong>calories</strong>.</p>
 <section id="indicateurs-statistiques" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="indicateurs-statistiques"><span class="header-section-number">3.2.1</span> Indicateurs statistiques</h3>
 <p><strong>Question :</strong> Que calculent les commandes <code>mean()</code>, <code>median()</code>, <code>var()</code>, <code>sd()</code>, <code>range()</code> ? Calculez l’étendue des données.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-20_dae603a17bba858d5d3065290c23907a">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Etudiez les sorties des commandes <code>summary(wine$Alcool)</code> et <code>quantile(wine$Alcool)</code>. Donnez également l’écart interquartile et les valeurs adjacentes.</p>
+<p><strong>Question :</strong> Etudiez les sorties des commandes <code>summary(gym$calories)</code> et <code>quantile(gym$calories)</code>. Donnez également l’écart interquartile et les valeurs adjacentes.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-21_f5e5420ccf3cb60b4d6c566379a68e19">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -528,28 +513,28 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 <section id="représentations-graphiques" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="représentations-graphiques"><span class="header-section-number">3.2.2</span> Représentations graphiques</h3>
 <p>Le but de la statistique exploratoire est de synthétiser, résumer et structurer l’information contenue dans des données. On utilise pour cela des représentations de données sous forme de graphiques.</p>
-<p><strong>Question :</strong> On peut utiliser la représentation par histogramme. Tapez <code>H&lt;-hist(wine$Alcool)</code> et commentez les différents attributs de <code>H</code>.</p>
+<p><strong>Question :</strong> On peut utiliser la représentation par histogramme. Tapez <code>H&lt;-hist(gym$calories)</code> et commentez les différents attributs de <code>H</code>.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-22_0040b917d3f3426f57811c4608c3473f">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Pour tracer un histogramme avec <code>ggplot2</code>, on pouvez utiliser le code suivant. Commentez.</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-23_8f84ddc66939b12ba554be27a4288e93">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>g1<span class="ot">&lt;-</span><span class="fu">ggplot</span>(wine,<span class="fu">aes</span>(<span class="at">x=</span>Alcool))<span class="sc">+</span></span>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-23_8637ac37077c704c0de8f416d724cf4a">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>g1<span class="ot">&lt;-</span><span class="fu">ggplot</span>(gym,<span class="fu">aes</span>(<span class="at">x=</span>calories))<span class="sc">+</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">15</span>,<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"white"</span>)<span class="sc">+</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Histo. des effectifs"</span>)<span class="sc">+</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Frequency"</span>)<span class="sc">+</span><span class="fu">xlab</span>(<span class="st">"Alcool"</span>)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>g2<span class="ot">&lt;-</span><span class="fu">ggplot</span>(wine,<span class="fu">aes</span>(<span class="at">x=</span>Alcool))<span class="sc">+</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y=</span>..density..),<span class="at">bins=</span><span class="dv">15</span>,<span class="at">color=</span><span class="st">"black"</span>, <span class="at">fill=</span><span class="st">"white"</span>)<span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Frequency"</span>)<span class="sc">+</span><span class="fu">xlab</span>(<span class="st">"calories"</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>g2<span class="ot">&lt;-</span><span class="fu">ggplot</span>(gym,<span class="fu">aes</span>(<span class="at">x=</span>calories))<span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y=</span><span class="fu">after_stat</span>(density)),<span class="at">bins=</span><span class="dv">15</span>,<span class="at">color=</span><span class="st">"black"</span>, <span class="at">fill=</span><span class="st">"white"</span>)<span class="sc">+</span></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Histo. des frequences"</span>)<span class="sc">+</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>)<span class="sc">+</span><span class="fu">xlab</span>(<span class="st">"Alcool"</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>)<span class="sc">+</span><span class="fu">xlab</span>(<span class="st">"calories"</span>)</span>
 <span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(g1,g2,<span class="at">ncol=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><strong>Question :</strong> A l’aide du code suivant, représentez un boxplot de la variable <strong>Alcool</strong>. Que remarquez-vous ? Comparez avec les valeurs adjacentes calculées précédemment.</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-24_2bbcc501f2f5e8da5ef512c8326abdf4">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(wine,<span class="fu">aes</span>(<span class="at">y=</span>Alcool))<span class="sc">+</span></span>
+<p><strong>Question :</strong> A l’aide du code suivant, représentez un boxplot de la variable <strong>calories</strong>. Que remarquez-vous ? Comparez avec les valeurs adjacentes calculées précédemment.</p>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-24_212559ba56c522655ee94bc6330fa9dc">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gym,<span class="fu">aes</span>(<span class="at">y=</span>calories))<span class="sc">+</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
@@ -562,46 +547,46 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 </div>
 <div class="callout-body-container">
 <p>Pour tracer les boxplots de toutes les variables quantitatives en même temps, il faut tout d’abord réorganiser le jeu de données. Il faut une variable qualitative pour <code>x</code> contenant le nom des variables quantitatives et <code>y</code> les valeurs numériques. Pour cela on utilise par exemple la fonction <code>melt()</code> :</p>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-25_9c5ed8b672cd561b5d9021587f6a95e0">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-25_a231e4be6ea676c38aef067e81a58e97">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gym)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     Qualite  Type AcidVol AcidCitr SO2lbr SO2tot Densite Alcool
-1352  medium rouge    0.62     0.01      8     46 0.99332   11.8
-5493  medium blanc    0.34     0.10     17     63 0.99370    9.2
-5153  medium blanc    0.22     0.22     39    110 0.99855    9.0
-5308  medium blanc    0.35     0.46     61    183 0.99786    9.0
-3866  medium blanc    0.42     0.32     20    167 0.99479   10.6
-694   medium rouge    0.48     0.32     21    122 0.99840    9.4</code></pre>
+<pre><code>  gender weight height duration calories  fat water    level   bmi
+1  homme   88.3   1.71     1.69     1313 12.6   3.5   expert 30.20
+2  femme   74.9   1.53     1.30      883 33.9   2.1   interm 32.00
+3  femme   68.1   1.66     1.11      677 33.4   2.3   interm 24.71
+4  homme   53.2   1.70     0.59      532 28.8   2.1 debutant 18.41
+5  homme   46.1   1.79     0.64      556 29.2   2.8 debutant 14.39
+6  femme   58.0   1.68     1.59     1116 15.5   2.7   expert 20.55</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>wineaux<span class="ot">&lt;-</span><span class="fu">melt</span>(wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wineaux)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>gymaux<span class="ot">&lt;-</span><span class="fu">melt</span>(gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)])</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gymaux)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  variable value
-1  AcidVol  0.62
-2  AcidVol  0.34
-3  AcidVol  0.22
-4  AcidVol  0.35
-5  AcidVol  0.42
-6  AcidVol  0.48</code></pre>
+1   weight  88.3
+2   weight  74.9
+3   weight  68.1
+4   weight  53.2
+5   weight  46.1
+6   weight  58.0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(wineaux<span class="sc">$</span>variable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gymaux<span class="sc">$</span>variable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
- AcidVol AcidCitr   SO2lbr   SO2tot  Densite   Alcool 
-     600      600      600      600      600      600 </code></pre>
+  weight   height duration calories      fat    water      bmi 
+     973      973      973      973      973      973      973 </code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-26_ceabcd6127d2182dc7b86c7967063161">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(wineaux,<span class="fu">aes</span>(<span class="at">x=</span>variable,<span class="at">y=</span>value))<span class="sc">+</span></span>
+<div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-26_f75b34967109c9fad767e6a3dab058b5">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gymaux,<span class="fu">aes</span>(<span class="at">x=</span>variable,<span class="at">y=</span>value))<span class="sc">+</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP2-StatDescrip-Sujet_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><strong>Question :</strong> En vous aidant de l’aide de R et des résultats de la section précédente, tapez <code>B&lt;-boxplot(wine$Alcool)</code> et commentez les différents attributs de <code>B</code>.</p>
+<p><strong>Question :</strong> En vous aidant de l’aide de R et des résultats de la section précédente, tapez <code>B&lt;-boxplot(gym$calories)</code> et commentez les différents attributs de <code>B</code>.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-27_0764709e6d110f08467939f848109f33">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -616,14 +601,14 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-28_6f622d4faa052ae2dec652c690f6a60e">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Représentez graphiquement la <strong>Densite</strong> en fonction de l’<strong>Alcool</strong> à l’aide de la commande <code>geom_point()</code>. Au vu de ce graphique, les variables sont-elles corrélées ? Vous pourrez ajouter la commande <code>+geom_smooth(method="lm")</code> pour tracer la droite de régression linéaire. Est-ce cohérent avec la corrélation calculée ci-dessus ?</p>
+<p><strong>Question :</strong> Représentez graphiquement les <strong>calories</strong> en fonction de la <strong>duration</strong> à l’aide de la commande <code>geom_point()</code>. Au vu de ce graphique, les variables sont-elles corrélées ? Vous pourrez ajouter la commande <code>+geom_smooth(method="lm")</code> pour tracer la droite de régression linéaire. Est-ce cohérent avec la corrélation calculée ci-dessus ?</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-29_f276fee42b1566f67bd74b266687d432">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="entre-une-variable-quantitative-et-une-variable-qualitative" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="entre-une-variable-quantitative-et-une-variable-qualitative"><span class="header-section-number">4.2</span> Entre une variable quantitative et une variable qualitative</h2>
-<p><strong>Question :</strong> Représentez le boxplot de la variable <strong>Alcool</strong> pour chaque modalité de la variable qualitative <strong>Type</strong>. Même question avec <strong>Qualite</strong>. Interprétez les résultats.</p>
+<p><strong>Question :</strong> Représentez le boxplot de la variable <strong>calories</strong> pour chaque modalité de la variable qualitative <strong>gender</strong>. Même question avec <strong>level</strong>. Interprétez les résultats.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-30_c88a433794220983534019b306922a0b">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -631,14 +616,14 @@ faceting: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-31_56fbfd5d71dc0f5b6769fbad7deee8ff">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> A l’aide de la fonction <code>eta2()</code> de la librairie <code>BioStatR</code>, calculez le rapport de corrélation <span class="math inline">\(\eta^2\)</span> entre chaque variable quantitative et la variable <strong>Type</strong>. Commentez. Faites de même avec la variable <strong>Qualité</strong>.</p>
+<p><strong>Question :</strong> A l’aide de la fonction <code>eta2()</code> de la librairie <code>BioStatR</code>, calculez le rapport de corrélation <span class="math inline">\(\eta^2\)</span> entre chaque variable quantitative et la variable <strong>gender</strong>. Commentez. Faites de même avec la variable <strong>level</strong>.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-32_bcfa5def8f586abc8fad921bb911f4a1">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="entre-deux-variables-qualitatives" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="entre-deux-variables-qualitatives"><span class="header-section-number">4.3</span> Entre deux variables qualitatives</h2>
-<p><strong>Question :</strong> Analysez la table de contingence entre les deux variables qualitatives <strong>Type</strong> et <strong>Qualite</strong> avec la commande <code>table()</code>. Ajoutez les effectifs marginaux avec la commande <code>addmargins()</code>.</p>
+<p><strong>Question :</strong> Analysez la table de contingence entre les deux variables qualitatives <strong>gender</strong> et <strong>level</strong> avec la commande <code>table()</code>. Ajoutez les effectifs marginaux avec la commande <code>addmargins()</code>.</p>
 <div class="cell" data-hash="TP2-StatDescrip-Sujet_cache/html/unnamed-chunk-33_8ea2e0faea4bc5b5be5893e0bae068a2">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

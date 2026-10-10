@@ -27,22 +27,22 @@ library(factoextra)
 library(reshape2)
 ```
 
+
 # Description des données
 
 Les données étudiées dans ce TP ont été recueillies à Rennes dans $112$ stations durant l'été 2001. Les 13 variables observées sont :
 
--   maxO3 : Maximum de concentration d'ozone observé sur la journée en $\mu$gr/m3
--   T9, T12, T15 : Température observée à 9, 12 et 15h
--   Ne9, Ne12, Ne15 : Nébulosité observée à 9, 12 et 15h
--   Vx9, Vx12, Vx15 : Composante E-O du vent à 9, 12 et 15h
--   vent : orientation du vent à 12h
--   pluie : occurrence ou non de précipitations
--   maxO3v : Maximum de concentration d'ozone observé la veille
++ maxO3 : Maximum de concentration d'ozone observé sur la journée en $\mu$gr/m3
++ T9, T12, T15 : Température observée à 9, 12 et 15h
++ Ne9, Ne12, Ne15 : Nébulosité observée à 9, 12 et 15h
++ Vx9, Vx12, Vx15 : Composante E-O du vent à 9, 12 et 15h
++ vent : orientation du vent à 12h
++ pluie : occurrence ou non de précipitations
++ maxO3v : Maximum de concentration d'ozone observé la veille 
 
-On charge les données, on transforme les variables qualitatives **pluie** et **vent**, et on supprime la dernière variable que l'on n'utilisera pas dans ce TP.
+On charge les données, on transforme les variables qualitatives **pluie** et **vent**, et on supprime la dernière variable que l'on n'utilisera pas dans ce TP. 
 
 ```{r}
-#| eval: false
 Ozone<-read.table("Ozone.txt",header=T)
 Ozone$pluie<-as.factor(Ozone$pluie)
 Ozone$vent<-as.factor(Ozone$vent)
@@ -53,14 +53,14 @@ summary(Ozone)
 Ainsi on a un jeu de données composé de $n=112$ individus et $p=12$ variables.
 
 ```{r}
-#| eval: false
 dim(Ozone)
 ```
 
+
 **Question :** Pour vous familiariser avec le jeu de données, quelques statistiques descriptives ont été programmées. Commentez les résultats.
 
+
 ```{r}
-#| eval: false
 ggplot(melt(Ozone[,-c(11,12)]),aes(x=variable,y=value))+
   geom_boxplot()
 
@@ -84,11 +84,14 @@ ggplot(df, aes(x="", y=value, fill=group))+
   theme(legend.position="bottom")
 ```
 
-**Question :** Représentez graphiquement les corrélations des variables quantitatives (vous pourrez utiliser la fonction `corrplot()`). Quelles sont les variables linéairement corrélées (ou non) ?
+**Question :** Représentez graphiquement les corrélations des
+variables quantitatives (vous pourrez utiliser la fonction `corrplot()`).
+Quelles sont les variables linéairement corrélées (ou non) ?
 
 ```{r}
 # A COMPLETER
 ```
+
 
 # ACP centrée
 
@@ -100,9 +103,10 @@ OzoneC<-scale(...) # A COMPLETER
 apply(OzoneC,2,mean)
 ```
 
-## A la main
 
-**Question** : A l'aide de la fonction `diag()`, créez la matrice de poids $W=\frac 1 n I_n$ et la métrique $M=I_p$.
+
+## A la main
+**Question **: A l'aide de la fonction `diag()`, créez la matrice de poids $W=\frac 1 n I_n$ et la métrique $M=I_p$. 
 
 ```{r}
 #| eval: false
@@ -113,7 +117,10 @@ W<- ...
 M<- ...
 ```
 
-**Question :** Quelle matrice cherche-t-on à diagonaliser dans ce cadre en ACP ? Programmez cette matrice (rappelons que la multiplication matricielle est `%*%`) et diagonalisez-la à l'aide de la fonction `eigen()`.
+
+
+**Question :** Quelle matrice cherche-t-on à diagonaliser dans ce cadre en ACP ?
+Programmez cette matrice (rappelons que la multiplication matricielle est `%*%`) et diagonalisez-la à l'aide de la fonction `eigen()`.
 
 ```{r}
 #| eval: false
@@ -123,18 +130,24 @@ Gamma<- ....
 A<-eigen(...)  
 ```
 
-**Question :** Que représentent les valeurs propres (`A$values`) dans ce cas ? Que représente la somme de ces valeurs propres ? Vérifiez numériquement.
+
+
+**Question :** Que représentent les valeurs propres (`A$values`) dans ce cas ? Que représente la somme de ces valeurs propres ? Vérifiez numériquement. 
 
 ```{r}
 #| eval: false
 # A COMPLETER
 ```
 
-**Question :** Calculez les pourcentages (cumulés ou non) d'inertie portés par chaque axe. Combien de composantes principales décidez-vous de retenir ? Vous pouvez vous aider des fonctions `sum()` et `cumsum()`.
+
+
+**Question :** Calculez les pourcentages (cumulés ou non) d'inertie portés par chaque axe. Combien de composantes principales décidez-vous de retenir ? Vous pouvez vous aider des fonctions `sum()` et `cumsum()`. 
 
 ```{r}
 # A COMPLETER
 ```
+
+
 
 **Question :** Que représentent les vecteurs propres (`A$vectors`) ? Construisez la matrice $C$ des composantes principales et vérifiez que la matrice $C$ est de dimension $n\times p$. Que représentent les coordonnées de la première colonne de $C$ ?
 
@@ -142,32 +155,38 @@ A<-eigen(...)
 # A COMPLETER
 ```
 
+
+
 ## Avec le package FactoMineR
 
-Rassurez-vous, nous avons programmé les étapes de l'ACP à des fins pédagogiques. En pratique, on utilise la librairie `FactoMineR`. Et on s'appuie sur la librairie `factoextra` pour les graphiques.
+Rassurez-vous, nous avons programmé les étapes de l'ACP à des fins pédagogiques. En pratique, on utilise la librairie `FactoMineR`. Et on s'appuie sur la librairie `factoextra` pour les graphiques. 
 
-On commence par programmer l'ACP centrée (pas réduite, `scale.unit=F`). On peut déclarer à la fonction `PCA` des variables qualitatives et quantitatives supplémentaires, ainsi que des individus supplémentaires. Ces éléments ne sont donc pas utilisés pour calculer l'ACP mais peuvent être exploités par la suite. Ici, on déclare donc les deux variables qualitatives **pluie** et **vent**. On trace ensuite les valeurs propres avec la fonction `fviz_eig()`.
+On commence par programmer l'ACP centrée (pas réduite, `scale.unit=F`). On peut déclarer à la fonction `PCA` des variables qualitatives et quantitatives supplémentaires, ainsi que des individus supplémentaires. Ces éléments ne sont donc pas utilisés pour calculer l'ACP mais peuvent être exploités par la suite. Ici, on déclare donc les deux variables qualitatives **pluie** et **vent**. On trace ensuite les valeurs propres avec la fonction `fviz_eig()`. 
 
 ```{r}
 #| eval: false
+
 respca<-PCA(Ozone,quali.sup=c(11,12),scale.unit = F,graph=F)
 respca$eig
 fviz_eig(respca)
 ```
 
-### Etude des individus
 
-**Question :** Que contient la sortie `respca$ind$coord$` ? Comparez avec les résultats de la partie précédente ? Vérifiez visuellement à l'aide de la commande `fviz_pca_ind(respca)`.
+### Etude des individus 
+
+**Question :** Que contient la sortie `respca$ind$coord$` ? Comparez avec les résultats de la partie précédente ? Vérifiez visuellement à l'aide de la commande `fviz_pca_ind(respca)`.  
 
 ```{r}
 #| eval: false
+#| 
 fviz_pca_ind(respca,geom=c("point"))
 ```
 
-**Question :** Que représentent les graphiques obtenus par les codes suivants ? Commentez.
+**Question :** Que représentent les graphiques suivants ? Commentez. 
 
 ```{r}
 #| eval: false
+
 fviz_pca_ind(respca,col.ind="contrib",geom=c("point"))
 fviz_pca_ind(respca,geom=c("point"),select.ind = list(cos2=0.95))
 fviz_pca_ind(respca,habillage=11,geom=c("point"))
@@ -180,25 +199,27 @@ fviz_pca_ind(respca,habillage=12,geom=c("point"))
 
 ```{r}
 #| eval: false
+
 plot(respca,choix="varcor")
 ```
 
-**Question :** Afin de visualiser les corrélations des variables initiales avec toutes les méta-variables, utilisez la fonction `corrplot()`. Commentez.
+**Question :** Afin de visualiser les corrélations des variables initiales avec toutes les méta-variables, utilisez la fonction `corrplot()`. Commentez. 
 
 ```{r}
 #| eval: false
+
 corrplot(respca$var$cor,method="ellipse")
 ```
 
 # ACP centrée réduite
 
-## A la main
+## A la main 
 
-On fait maintenant une analyse en composantes principales sur les données centrées et réduites.
-
+On fait maintenant une analyse en composantes principales sur les données centrées et réduites. 
+ 
 ```{r}
 #| eval: false
-n<-nrow(OzoneC)
+
 s<-sqrt((n-1)*apply(OzoneC,2,var)/n)
 OzoneCR<-OzoneC%*%diag(1/s)
 ```
@@ -206,10 +227,13 @@ OzoneCR<-OzoneC%*%diag(1/s)
 **Question :** Comparez `OzoneCR` avec `scale(Ozone[,-c(11,12)])`.
 
 ```{r}
+
 # A COMPLETER
 ```
 
-**Question :** Quelle matrice cherche-t-on à diagonaliser dans ce cadre en ACP ? Programmez cette matrice et diagonalisez-la à l'aide de la fonction `eigen()`.
+
+**Question :** Quelle matrice cherche-t-on à diagonaliser dans ce cadre en ACP ?
+Programmez cette matrice et diagonalisez-la à l'aide de la fonction `eigen()`.
 
 ```{r}
 #| eval: false
@@ -219,45 +243,117 @@ Gamma2<- ....
 B<-eigen(...)  
 ```
 
-**Question :** Que représentent les valeurs propres dans ce cas ? Que représente la somme de ces valeurs propres ? Vérifiez numériquement.
+
+**Question :** Que représentent les valeurs propres dans ce cas ? Que représente la somme de ces valeurs propres ? Vérifiez numériquement. 
 
 ```{r}
 #| eval: false
+
 # A COMPLETER
 ```
 
-**Question :** Comment peut-on obtenir les résultats de cette ACP centrée réduite à partir du tableau de données centrées. Vérifiez numériquement.
+
+**Question :** Comment peut-on obtenir les résultats de cette ACP centrée réduite à partir du tableau de données centrées. Vérifiez numériquement. 
 
 ```{r}
 #| eval: false
+
 # A COMPLETER
 ```
+
 
 ## Avec FactoMineR
 
-**Question :** On fait une ACP centrée réduite à l'aide de la fonction `PCA()` de la librairie `FactoMineR` en imposant `scale.unit=T` et on trace les valeurs propres à l'aide de `fviz_eig()` de la librairie `factoextra`. Interprétez les résultats.
+**Question :**
+On fait une ACP centrée réduite à l'aide de la fonction `PCA()` de la librairie `FactoMineR` en imposant `scale.unit=T` et on trace  les valeurs propres à l'aide de `fviz_eig()` de la librairie `factoextra`. Interprétez les résultats. 
 
 ```{r}
 #| eval: false
+
 respca2<-PCA(Ozone,quali.sup=c(11,12),scale.unit=T,graph=F)
 respca2$eig
 fviz_eig(respca2)
 ```
 
-**Question :** Représentez le graphe des individus et celui des variables à l'aide des fonctions `fviz_pca_ind()`et `fviz_pca_var()` dans le premier plan factoriel. Quelles différences remarquez-vous avec l'ACP centrée ?
+**Question :** Représentez le graphe des individus et celui des variables à l'aide des fonctions `fviz_pca_ind()`et `fviz_pca_var()` dans le premier plan factoriel. Quelles différences remarquez-vous avec l'ACP centrée ? 
 
 ```{r}
+#| eval: false
+
 # A COMPLETER
 ```
+
 
 **Question :** Afin de visualiser les corrélations des variables intiales avec toutes les méta-variables, utilisez la fonction `corrplot()`. Commentez.
 
 ```{r}
+#| eval: false
+
 # A COMPLETER
 ```
 
-**Question :** Poursuivez l'exploitation des résultats en regardant d'autres plans factoriels, en exploitant l'information des variables qualitatives **pluie** et **vent**.
+**Question :** Poursuivez l'exploitation des résultats en regardant d'autres plans factoriels, en exploitant l'information des variables qualitatives **pluie** et **vent**. 
 
 ```{r}
 # A COMPLETER
 ```
+
+
+# ACP sur les données DataGym3MIC
+
+On met maintenant en pratique l'ACP sur le jeu de données **DataGym3MIC** étudié dans le TP2. On rappelle qu'il fournit un aperçu des routines d'exercice, des attributs physiques et des mesures de la condition physique de $n=973$ membres d'une salle de sport, décrits par les variables suivantes :
+
++ *gender* : sexe du membre (*Female* ou *Male*),
++ *weight* : poids (en kg),
++ *height* : taille (en m),
++ *duration* : durée de chaque séance d'entraînement (en heures),
++ *calories* : total des calories brûlées au cours de chaque séance,
++ *fat* : pourcentage de graisse corporelle,
++ *water* : consommation quotidienne d'eau pendant les séances d'entraînement (en litres),
++ *level* : niveau d'expérience, de débutant (1) à expert (3),
++ *bmi* : indice de masse corporelle (IMC), calculé à partir de la taille et du poids.
+
+On charge les données et on transforme les variables qualitatives **gender** et **level** comme dans le TP2.
+
+```{r}
+#| eval: false
+
+gym<-read.table("DataGym3MIC.txt",header=TRUE)
+gym$gender<-as.factor(gym$gender)
+gym$level<-factor(gym$level,labels=c("debutant","interm","expert"))
+summary(gym)
+```
+
+L'ACP sera réalisée sur les $7$ variables quantitatives ; les variables qualitatives **gender** (colonne 1) et **level** (colonne 8) seront utilisées comme variables supplémentaires pour l'interprétation.
+
+**Question :** En vous appuyant sur les résultats du TP2 (échelles et dispersions des variables, corrélations, ...), faut-il faire une ACP centrée ou une ACP centrée réduite sur ces données ? Justifiez votre réponse, éventuellement en comparant numériquement les deux ACP.
+
+```{r}
+# A COMPLETER
+```
+
+
+**Question :** Réalisez l'ACP adaptée à l'aide de la fonction `PCA()` de la librairie `FactoMineR`. Combien de composantes principales décidez-vous de retenir ? 
+
+```{r}
+#| eval: false
+
+# A COMPLETER
+respcaGym<-PCA(...)
+```
+
+
+
+**Question :** Etudiez les corrélations entre les variables initiales et les composantes principales retenues. Interprétez les méta-variables. 
+
+```{r}
+# A COMPLETER
+```
+
+
+**Question :** Représentez les individus dans les plans factoriels retenus en les colorant selon les modalités des variables qualitatives **gender** et **level**. Interprétez en croisant avec le graphe des variables.
+
+```{r}
+# A COMPLETER
+```
+

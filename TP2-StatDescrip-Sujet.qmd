@@ -15,7 +15,7 @@ format:
 ---
 
 ```{r}
-#| echo: false 
+#| echo: false
 #| error: false
 #| warning: false
 
@@ -27,36 +27,39 @@ library(reshape2)
 library(BioStatR)
 ```
 
-Ce TP a pour objectif de mener l'étude descriptive uni- et bi-dimensionnelle du jeu de données `wine` disponible sous Moodle. Vous rédigerez les réponses et vos observations dans le script en .qmd du TP au fur et à mesure. Vous pourrez compiler votre script à la fin du TP pour obtenir un compte-rendu du TP.
+Ce TP a pour objectif de mener l'étude descriptive uni- et bi-dimensionnelle
+du jeu de données `DataGym3MIC` disponible sous Moodle. Vous rédigerez les réponses
+et vos observations dans le script en .qmd du TP au fur et à mesure. Vous pourrez compiler votre script à la fin du TP pour obtenir un compte-rendu du TP.
 
-*Remarque : pensez à enlever les "#\|eval: false" au fur et à mesure de l'avancement dans le TP pour avoir les résultats dans votre compte-rendu final de TP.*
+*Remarque : pensez à enlever les "#|eval: false" au fur et à mesure de l'avancement dans le TP pour avoir les résultats dans votre compte-rendu final de TP.*
 
 # Données
 
-On va étudier le jeu de données **wine** disponible sur la page moodle du cours.
+On va étudier le jeu de données **DataGym3MIC** disponible sur la page moodle du cours.
 
 Commencez par récupérer ce jeu de données et sauvegardez le fichier dans votre dossier de travail. Chargez le jeu de données à l'aide de la fonction `read.table()` :
 
 ```{r}
-wine <- read.table("wine.txt",header=TRUE)
+gym <- read.table("DataGym3MIC.txt",header=TRUE)
 ```
 
 Vous pouvez voir les premières lignes du jeu de données à l'aide de la fonction `head()` :
 
 ```{r}
-head(wine)
+head(gym)
 ```
 
-Le jeu de données **wine** comprend des mesures physico-chimiques réalisées sur un échantillon de $600$ vins (rouges et blancs) du Portugal. Ces mesures sont complétées par une évaluation sensorielle de la qualité par un ensemble d'experts. Chaque vin est décrit par les variables suivantes :
+Le jeu de données **DataGym3MIC** fournit un aperçu détaillé des routines d'exercice, des attributs physiques et des mesures de la condition physique de $973$ membres d'une salle de sport. Chaque membre est décrit par les variables suivantes :
 
--   *Qualite* : son évaluation sensorielle par les experts (*bad*,*medium*,*good*),
--   *Type* : son type (1 pour un vin rouge, 0 pour un vin blanc),
--   *AcidVol* : la teneur en acide volatile (en g/dm3 d'acide acétique),
--   *AcidCitr* : la teneur en acide citrique (en g/dm3),
--   *SO2lbr* : le dosage du dioxyde de soufre libre (en mg/dm3),
--   *SO2tot* : le dosage du dioxyde de soufre total (en mg/dm3),
--   *Densite* : la densité (en g/cm3),
--   *Alcool* : le degré d'alcool (en % Vol.).
++ *gender* : son sexe (*Female* pour une femme, *Male* pour un homme),
++ *weight* : son poids (en kg),
++ *height* : sa taille (en m),
++ *duration* : la durée de chaque séance d'entraînement (en heures),
++ *calories* : le total des calories brûlées au cours de chaque séance,
++ *fat* : son pourcentage de graisse corporelle,
++ *water* : sa consommation quotidienne d'eau pendant les séances d'entraînement (en litres),
++ *level* : son niveau d'expérience, de débutant (1) à expert (3),
++ *bmi* : son indice de masse corporelle (IMC), calculé à partir de la taille et du poids.
 
 **Question :** Contrôlez la dimension du jeu de données (c'est-à-dire le nombre d'individus et le nombre de variables). Vous pouvez vous aider des fonctions `dim()`, `nrow()`et `ncol()`.
 
@@ -64,13 +67,18 @@ Le jeu de données **wine** comprend des mesures physico-chimiques réalisées s
 # A COMPLETER
 ```
 
-**Question :** Contrôlez que l'objet `wine` est bien de type data.frame (commande `is.data.frame()`).
 
-Remarquons que l'on peut obtenir les noms des variables grâce à la commande `names(wine)` ou `colnames(wine)`. Plus largement, on peut utiliser la commande `attributes()`.
+
+**Question :**  Contrôlez que l'objet `gym` est bien de type data.frame (commande `is.data.frame()`).
+
+Remarquons que l'on peut obtenir les noms des variables grâce à la commande `names(gym)` ou `colnames(gym)`. Plus largement, on peut utiliser la commande `attributes()`.
+
+
 
 ```{r}
 # A COMPLETER
 ```
+
 
 **Question :** Quelle est la nature de chaque variable ? Vous pouvez vous aider de la commande `str()`.
 
@@ -78,24 +86,28 @@ Remarquons que l'on peut obtenir les noms des variables grâce à la commande `n
 # A COMPLETER
 ```
 
+
+
 On voit ici que les variables sont de différentes natures :
 
--   Les variables *Qualite* et *Type* sont des variables *qualitatives*
--   Les autres variables sont *quantitatives*
++ La variable *gender* est une variable *qualitative nominale*
++ La variable *level* est une variable *qualitative ordinale* (bien que codée par des entiers 1, 2, 3 dans le fichier !)
++ Les autres variables sont *quantitatives*
 
-Attention, il faut bien préciser à R les variables qui doivent être considérées comme qualitatives. On utilise donc la fonction `as.factor()` sur les variables *Qualite* et *Type*. On va aussi en profiter pour renommer les modalités de la variable *Type* en `blanc`et `rouge`.
+Attention, il faut bien préciser à R les variables qui doivent être considérées comme qualitatives. On utilise donc la fonction `factor()` sur les variables *gender* et *level*. On va aussi en profiter pour renommer les modalités de la variable *gender* en `femme` et `homme`, et celles de la variable *level* en `debutant`, `interm` et `expert`.
 
 ```{r}
-wine$Qualite<-as.factor(wine$Qualite)
-wine$Type<-factor(wine$Type,labels=c("blanc","rouge"))
-head(wine)
+gym$gender<-factor(gym$gender,labels=c("femme","homme"))
+gym$level<-factor(gym$level,labels=c("debutant","interm","expert"))
+head(gym)
 ```
 
 On peut obtenir un résumé rapide du jeu de données à l'aide de la fonction `summary()`
 
 ```{r}
-summary(wine)
+summary(gym)
 ```
+
 
 # Présentation de `ggplot2`
 
@@ -106,11 +118,10 @@ Avant de commencer l'analyse uni- et bi-dimensionnelle du jeu de données, on va
 Un graphique en `ggplot2` s'initialise avec la fonction `ggplot()` qui prend en argument le jeu de données étudié. Par exemple,
 
 ```{r}
-gEx <- ggplot(data=wine)
+gEx <- ggplot(data=gym)
 ```
 
 Pour l'instant, on ne voit rien mais pourtant l'objet `gEx` contient des informations:
-
 ```{r}
 summary(gEx)
 names(gEx)
@@ -119,248 +130,275 @@ gEx$layers
 
 mais pour l'instant son `layers` est vide.
 
-On ajoute ensuite des éléments graphiques, appelés `geom`, à l'objet graphique grâce à l'opérateur `+` et on précise à l'aide de la fonction `aes()` les données à utiliser en argument du `geom`. Par exemple, si on veut tracer le nuage de points entre les variables `Densite` et `Alcool` :
+On ajoute ensuite des éléments graphiques, appelés `geom`, à l'objet graphique grâce à l'opérateur `+` et on précise à l'aide de la fonction `aes()` les données à utiliser en argument du `geom`. Par exemple, si on veut tracer le nuage de points entre les variables `duration` et `calories` :
 
 ```{r}
-ggplot(data=wine,aes(x=Densite,y=Alcool))+
+ggplot(data=gym,aes(x=duration,y=calories))+
    geom_point()
 ```
 
 Parmi les `geom` les plus utilisés, on peut citer
 
--   `geom_point()` : nuage de points
--   `geom_line()` : trace des lignes
--   `geom_bar()` : représentation en bâtons
--   `geom_boxplot()` : boxplot
--   `geom_violin()` : violin plot
--   `geom_histogram()` : histogramme
--   `geom_density()` : densité
--   `geom_smooth()`
+  - `geom_point()` : nuage de points
+  - `geom_line()` : trace des lignes
+  - `geom_bar()` : représentation en bâtons
+  - `geom_boxplot()` : boxplot
+  - `geom_violin()` : violin plot
+  - `geom_histogram()` : histogramme
+  - `geom_density()` : densité
+  - `geom_smooth()`
 
 On peut ajouter un **mappage**, c'est à dire une mise en relation entre un attribut graphique d'un `geom` et une variable du tableau de données. Par exemple, on peut mettre des couleurs à un nuage de points en fonction d'une variable qualitative, ... Il faut bien distinguer un mappage d'une modification d'un attribut graphique sans lien avec une variable. Une règle importante à retenir est donc
 
--   pour définir un mappage (relation entre les valeurs d'une variable et un attribut graphique), on le déclare dans `aes()`
--   pour modifier un attribut graphique de la même manière pour tous les points, on le définit en-dehors de la fonction `aes()`.
++ pour définir un mappage (relation entre les valeurs d'une variable et un attribut graphique), on le déclare dans `aes()`
++ pour modifier un attribut graphique de la même manière pour tous les points, on le définit en-dehors de la fonction `aes()`.
 
 Par exemple,
 
 ```{r}
-ggplot(data=wine)+
-   geom_point(aes(x=Densite,y=Alcool,color=Type))
+ggplot(data=gym)+
+   geom_point(aes(x=duration,y=calories,color=level))
 ```
 
 ```{r}
-ggplot(data=wine)+
-   geom_point(aes(x=Densite,y=Alcool),color="blue")
+ggplot(data=gym)+
+   geom_point(aes(x=duration,y=calories),color="blue")
 ```
 
-On peut représenter plusieurs `geom` sur un même graphique simultanément, il suffit d'utiliser l'opérateur `+` pour les ajouter au fur et à mesure. Par exemple,
+On peut représenter plusieurs `geom` sur un même graphique simultanément, il suffit d'utiliser l'opérateur `+` pour les ajouter au fur et à mesure.
+Par exemple,
 
 ```{r}
-ggplot(data=wine)+
-  geom_violin(aes(x=Qualite,y=Alcool))+
-   geom_point(aes(x=Qualite,y=Alcool), col = "blue", alpha = 0.2,position="jitter")
+ggplot(data=gym)+
+  geom_violin(aes(x=level,y=calories))+
+   geom_point(aes(x=level,y=calories), col = "blue", alpha = 0.2,position="jitter")
 ```
 
 Les **scales** permettent de modifier la façon dont un attribut graphique est lié aux valeurs d'une variable. Pour les modifier, on ajoute un nouvel élément de la forme `scale_<attribut>_<type>` à l'objet graphique ggplot2 avec `+`. Les **scales** les plus connus sont :
 
--   `scale_size()` (avec son argument `range`) pour modifier les tailles minimales, maximales, ...
--   `scale_x()` et `scale_y()` pour modifier l'axe `x`et l'axe `y` respectivement
--   `scale_x_continuous()` (resp. `scale_x_discrete()`) pour modifier l'axe des `x` dans le cas d'une variable quantitative (resp. une variable qualitative)
--   `scale_y_continuous()` (resp. `scale_y_discrete()`) pour modifier l'axe des `y` dans le cas d'une variable quantitative (resp. une variable qualitative)
--   `scale_color()` pour modifier les couleurs de dessin
--   `scale_fill()` pour modifier les couleurs de remplissage
++ `scale_size()` (avec son argument `range`) pour modifier les tailles minimales, maximales, ...
++ `scale_x()` et `scale_y()` pour modifier l'axe `x`et l'axe `y` respectivement
++ `scale_x_continuous()` (resp. `scale_x_discrete()`) pour modifier l'axe des `x` dans le cas d'une variable quantitative (resp. une variable qualitative)
++ `scale_y_continuous()` (resp. `scale_y_discrete()`) pour modifier l'axe des `y` dans le cas d'une variable quantitative (resp. une variable qualitative)
++ `scale_color()` pour modifier les couleurs de dessin
++ `scale_fill()` pour modifier les couleurs de remplissage
 
-Pour les couleurs, on peut spécifier un gradient de couleur sur une variable quantitative avec `scale_color_gradient()`, modifier manuellement la palette de couleur avec `scale_color_manual()`, faire appel à une palette de couleur prédéfinie (par exemple en utilisant le package [viridis](%22https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html%22){target="_blank"} avec `scale_color_viridis`, en s'appuyant sur les palettes disponibles dans [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3){target="_blank"} avec `scale_color_brewer()`), ...
+Pour les couleurs, on peut spécifier un gradient de couleur sur une variable quantitative avec `scale_color_gradient()`, modifier manuellement la palette de couleur avec `scale_color_manual()`, faire appel à une palette de couleur prédéfinie (par exemple en utilisant le package [viridis]("https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html"){target="_blank"} avec `scale_color_viridis`,
+en s'appuyant sur les palettes disponibles dans [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3){target="_blank"} avec `scale_color_brewer()`),  ...
+
 
 ```{r}
-ggplot(data=wine)+
-  geom_point(aes(x=Alcool,y=Densite,size=AcidVol,color=Type))+
-  scale_size("Acide vol.", range = c(0,1.5),breaks=seq(0,1.5,0.2)) +
-  scale_x_continuous("Alcool",limits=c(8,16)) +
-  scale_y_continuous("Densité",limits=c(0.985,1.01))
+ggplot(data=gym)+
+  geom_point(aes(x=duration,y=calories,size=fat,color=gender))+
+  scale_size("Graisse (%)", range = c(0,2),breaks=seq(10,35,5)) +
+  scale_x_continuous("Durée (h)",limits=c(0.5,2)) +
+  scale_y_continuous("Calories",limits=c(300,1800))
 ```
+
 
 Remarque : on peut modifier certains éléments avec une commande spécifique comme
 
--   `ggtitle()` pour modifier le titre
--   `xlab()`et `ylab()` pour modifier l'intituler de l'axe des abscisses et des ordonnées respectivement
++ `ggtitle()` pour modifier le titre
++ `xlab()`et `ylab()` pour modifier l'intituler de l'axe des abscisses et des ordonnées respectivement
 
 En bref, les possibles avec `ggplot2` sont infinis car de nombreux éléments sont personnalisables. Voici quelques références pour les graphiques en `ggplot2` parmi les nombreuses ressources disponibles sur le web :
 
--   Le livre [*Ggplot2: Elegant Graphics for Data Analysis*](https://link.springer.com/book/10.1007/978-0-387-98141-3){target="_blank"} de H. Wickham.
--   Le [site web de ggplot2](%22https://ggplot2.tidyverse.org/%22){target="_blank"}
--   [The R Graph Gallery](https://www.r-graph-gallery.com/ggplot2-package.html){target="_blank"}
--   [The Cheat Sheet de ggplot 2](https://thinkr.fr/pdf/ggplot2-french-cheatsheet.pdf){target="_blank"}
++ Le livre [*Ggplot2: Elegant Graphics for Data Analysis*](https://link.springer.com/book/10.1007/978-0-387-98141-3){target="_blank"} de H. Wickham.
++ Le [site web de ggplot2]("https://ggplot2.tidyverse.org/"){target="_blank"}
++ [The R Graph Gallery](https://www.r-graph-gallery.com/ggplot2-package.html){target="_blank"}
++ [The Cheat Sheet de ggplot 2](https://thinkr.fr/pdf/ggplot2-french-cheatsheet.pdf){target="_blank"}
 
-# Etude statistique unidimensionnelle
 
-## Pour une variable qualitative
+#	Etude statistique unidimensionnelle
 
-Nous nous intéressons dans cette partie aux deux variables qualitatives **Type** et **Qualite**.
+##	Pour une variable qualitative
 
-**Question :** A l'aide des commandes `table()`, `summary()` et `levels()`, donnez un résumé de la variable **Type**. Quels sont les modalités du facteur ?
+Nous nous intéressons dans cette partie aux deux variables qualitatives **gender** et **level**.
+
+**Question :** A l'aide des commandes `table()`, `summary()` et `levels()`, donnez un résumé de la variable **gender**. Quels sont les modalités du facteur ?
 
 ```{r}
 # A COMPLETER
 ```
 
-**Question :** A l'aide du code suivant, résumez graphiquement la variable **Type** par une représentation par secteurs ou un diagramme en barres. Interprétez les résultats.
+
+
+**Question :** A l'aide du code suivant, résumez graphiquement la variable **gender** par une représentation par secteurs ou un diagramme en barres. Interprétez les résultats.
 
 ```{r}
-g1<-ggplot(wine, aes(x=Type))+ 
+g1<-ggplot(gym, aes(x=gender))+
   geom_bar()+
   ylab("")+
   ggtitle("Effectifs")
-g2<-ggplot(wine, aes(x = Type)) +  
-  geom_bar(aes(y = (..count..)/sum(..count..)))+
+g2<-ggplot(gym, aes(x = gender)) +
+  geom_bar(aes(y = (after_stat(count))/sum(after_stat(count))))+
   ylab("")+
   ggtitle("Frequences")
 
-df <- data.frame(group = levels(wine$Type),
-                 value = as.vector(table(wine$Type))/nrow(wine))
+df <- data.frame(group = levels(gym$gender),
+                 value = as.vector(table(gym$gender))/nrow(gym))
 g3<-ggplot(df, aes(x="", y=value, fill=group))+
-  geom_bar(width = 1, stat = "identity")+ 
-  coord_polar("y", start=0)+ 
+  geom_bar(width = 1, stat = "identity")+
+  coord_polar("y", start=0)+
   theme(legend.position="bottom")
 grid.arrange(g3,g1,g2,ncol=3)
 ```
 
-**Question :** La variable **Qualite** est une variable qualitative ordinale. On peut donc utiliser les effectifs cumulés et les fréquences cumulées. Pour tracer les fréquences cumulées, il faut que l'ordre des modalités soit bien compris par R. Ici, on commence par réorganiser les modalités en *bad*, *medium* et *good*. A l'aide des codes suivants, étudiez la variable **Qualite**.
+
+
+**Question :** La variable **level** est une variable qualitative ordinale. On peut donc utiliser les effectifs cumulés et les fréquences cumulées. Pour tracer les fréquences cumulées, il faut que l'ordre des modalités soit bien compris par R. Ici, on s'assure que les modalités sont bien ordonnées en *debutant*, *interm* et *expert* (c'est déjà le cas ici, mais la fonction `fct_relevel()` permet de réorganiser les modalités si besoin). A l'aide des codes suivants, étudiez la variable **level**.
 
 ```{r}
 #| echo: true
-wine$Qualite <- fct_relevel(wine$Qualite,"bad","medium","good")
+gym$level <- fct_relevel(gym$level,"debutant","interm","expert")
 
-EffQual=as.vector(table(wine$Qualite))
-FreqQual= data.frame(Eff = EffQual, 
-                     Freq = EffQual/length(wine$Qualite),   FreqCumul=cumsum(EffQual)/length(wine$Qualite))
-rownames(FreqQual)<-levels(wine$Qualite)
+EffLevel=as.vector(table(gym$level))
+FreqLevel= data.frame(Eff = EffLevel,
+                     Freq = EffLevel/length(gym$level),   FreqCumul=cumsum(EffLevel)/length(gym$level))
+rownames(FreqLevel)<-levels(gym$level)
 
-knitr::kable(FreqQual, 
-             caption = 'Description de la variable Qualite',
+knitr::kable(FreqLevel,
+             caption = 'Description de la variable level',
              booktabs = TRUE,
              digits=3)
 ```
 
 ```{r}
-df <- data.frame(Qualite = levels(wine$Qualite), 
-      value = table(wine$Qualite),
-      valuecumul = 100 *cumsum(prop.table(table(wine$Qualite))))
-df$Qualite <- fct_relevel(df$Qualite, "bad", "medium", "good")
+df <- data.frame(level = levels(gym$level),
+      value = table(gym$level),
+      valuecumul = 100 *cumsum(prop.table(table(gym$level))))
+df$level <- fct_relevel(df$level, "debutant", "interm", "expert")
 
-df <- data.frame(df, freq = df$value.Freq/nrow(wine))
-g1 <- ggplot(wine) + 
-  geom_bar(aes(x = Qualite)) +
+df <- data.frame(df, freq = df$value.Freq/nrow(gym))
+g1 <- ggplot(gym) +
+  geom_bar(aes(x = level)) +
   ggtitle("Effectifs")+
-  xlab("Qualite")
-g2 <- ggplot(wine) + 
-  geom_bar(aes(x = Qualite, y = ..prop.., group = 1))+
+  xlab("level")
+g2 <- ggplot(gym) +
+  geom_bar(aes(x = level, y = after_stat(prop), group = 1))+
   ggtitle("Frequences")+
-  xlab("Qualite")
-g3 <- ggplot(df, aes(x = Qualite, y = valuecumul))+ 
+  xlab("level")
+g3 <- ggplot(df, aes(x = level, y = valuecumul))+
   geom_bar(stat = "identity")+
   ggtitle("Fréquences cumulées")
-g4 <- ggplot(df, aes(x = "", y = freq, fill = Qualite))+
+g4 <- ggplot(df, aes(x = "", y = freq, fill = level))+
   geom_bar(width = 1, stat = "identity")+
   coord_polar("y", start = 0)
 grid.arrange(g1, g2, g3, g4, ncol = 2)
 ```
 
-## Pour une variable quantitative
 
-Pour cette section, on se focalise sur la variable **Alcool**.
+
+##	Pour une variable quantitative
+
+Pour cette section, on se focalise sur la variable **calories**.
 
 ### Indicateurs statistiques
 
-**Question :** Que calculent les commandes `mean()`, `median()`, `var()`, `sd()`, `range()` ? Calculez l'étendue des données.
+**Question :** Que calculent les commandes `mean()`, `median()`, `var()`, `sd()`, `range()` ? Calculez l’étendue des données.
 
 ```{r}
 # A COMPLETER
 ```
 
-**Question :** Etudiez les sorties des commandes `summary(wine$Alcool)` et `quantile(wine$Alcool)`. Donnez également l'écart interquartile et les valeurs adjacentes.
+
+
+**Question :** Etudiez les sorties des commandes `summary(gym$calories)` et `quantile(gym$calories)`.
+Donnez également l’écart interquartile et les valeurs adjacentes.
 
 ```{r}
 # A COMPLETER
 ```
+
+
 
 ### Représentations graphiques
 
 Le but de la statistique exploratoire est de synthétiser, résumer et structurer l'information contenue dans des données. On utilise pour cela des représentations de données sous forme de graphiques.
 
-**Question :** On peut utiliser la représentation par histogramme. Tapez `H<-hist(wine$Alcool)` et commentez les différents attributs de `H`.
-
+**Question :** On peut utiliser la représentation par histogramme.
+Tapez `H<-hist(gym$calories)` et commentez les différents attributs de `H`.
 ```{r}
 # A COMPLETER
 ```
+
+
 
 Pour tracer un histogramme avec `ggplot2`, on pouvez utiliser le code suivant. Commentez.
 
 ```{r}
-g1<-ggplot(wine,aes(x=Alcool))+
+g1<-ggplot(gym,aes(x=calories))+
   geom_histogram(bins=15,color="black",fill="white")+
   ggtitle("Histo. des effectifs")+
-  ylab("Frequency")+xlab("Alcool")
-g2<-ggplot(wine,aes(x=Alcool))+
-  geom_histogram(aes(y=..density..),bins=15,color="black", fill="white")+
+  ylab("Frequency")+xlab("calories")
+g2<-ggplot(gym,aes(x=calories))+
+  geom_histogram(aes(y=after_stat(density)),bins=15,color="black", fill="white")+
   ggtitle("Histo. des frequences")+
-  ylab("Density")+xlab("Alcool")
+  ylab("Density")+xlab("calories")
 grid.arrange(g1,g2,ncol=2)
 ```
 
-**Question :** A l'aide du code suivant, représentez un boxplot de la variable **Alcool**. Que remarquez-vous ? Comparez avec les valeurs adjacentes calculées précédemment.
+
+**Question :** A l'aide du code suivant, représentez un boxplot de la variable **calories**. Que remarquez-vous ? Comparez avec les valeurs adjacentes calculées précédemment.
 
 ```{r}
-ggplot(wine,aes(y=Alcool))+
+ggplot(gym,aes(y=calories))+
   geom_boxplot()
 ```
 
-::: {.callout-important appearance="simple" icon="false"}
-Pour tracer les boxplots de toutes les variables quantitatives en même temps, il faut tout d'abord réorganiser le jeu de données. Il faut une variable qualitative pour `x` contenant le nom des variables quantitatives et `y` les valeurs numériques. Pour cela on utilise par exemple la fonction `melt()` :
+::: {.callout-important appearance="simple" icon=false}
+Pour tracer les boxplots de toutes les variables quantitatives en même temps, il faut tout d'abord réorganiser le jeu de données.
+Il faut une variable qualitative pour `x` contenant le nom des variables quantitatives et `y` les valeurs numériques. Pour cela on utilise par exemple la fonction `melt()` :
 
 ```{r}
-head(wine)
-wineaux<-melt(wine[,-c(1,2)])
-head(wineaux)
-table(wineaux$variable)
+head(gym)
+gymaux<-melt(gym[,-c(1,8)])
+head(gymaux)
+table(gymaux$variable)
 ```
 :::
 
 ```{r}
-ggplot(wineaux,aes(x=variable,y=value))+
+ggplot(gymaux,aes(x=variable,y=value))+
   geom_boxplot()
 ```
 
-**Question :** En vous aidant de l'aide de R et des résultats de la section précédente, tapez `B<-boxplot(wine$Alcool)` et commentez les différents attributs de `B`.
+
+**Question :** En vous aidant de l'aide de R et des résultats de la section précédente, tapez `B<-boxplot(gym$calories)` et commentez les différents attributs de `B`.
 
 ```{r}
 # A COMPLETER
 ```
 
-# Statistiques descriptives bidimensionnelles
 
-## Entre 2 variables quantitatives
+#	Statistiques descriptives bidimensionnelles
+##	Entre 2 variables quantitatives
 
-**Question :** Calculez la matrice de corrélation des variables quantitatives (commande `cor()`) ou la matrice de variance-covariance (commandes `var()` ou `cov()`). Représentez graphiquement les corrélations à l'aide de la fonction `corrplot()` de la librairie `corrplot`. Vous pourrez utiliser l'option `method="ellipse"` pour une meilleure lisibilité. Interprétez les résultats.
+**Question :** Calculez la matrice de corrélation des variables quantitatives (commande `cor()`) ou la matrice de variance-covariance (commandes `var()`
+ou `cov()`). Représentez graphiquement les corrélations à l'aide de la fonction `corrplot()` de la librairie `corrplot`. Vous pourrez utiliser l'option `method="ellipse"` pour une meilleure lisibilité. Interprétez les résultats.
+
+```{r}
+# A COMPLETER
+```
+
+
+**Question :** Représentez graphiquement les **calories** en fonction de la **duration** à l'aide de la commande `geom_point()`. Au vu de ce graphique, les variables sont-elles corrélées ? Vous pourrez ajouter la commande `+geom_smooth(method="lm")`
+pour tracer la droite de régression linéaire. Est-ce cohérent avec la corrélation calculée ci-dessus ?
 
 ```{r}
 # A COMPLETER
 ```
 
-**Question :** Représentez graphiquement la **Densite** en fonction de l'**Alcool** à l'aide de la commande `geom_point()`. Au vu de ce graphique, les variables sont-elles corrélées ? Vous pourrez ajouter la commande `+geom_smooth(method="lm")` pour tracer la droite de régression linéaire. Est-ce cohérent avec la corrélation calculée ci-dessus ?
-
-```{r}
-# A COMPLETER
-```
 
 ## Entre une variable quantitative et une variable qualitative
 
-**Question :** Représentez le boxplot de la variable **Alcool** pour chaque modalité de la variable qualitative **Type**. Même question avec **Qualite**. Interprétez les résultats.
+**Question :** Représentez le boxplot de la variable **calories** pour chaque modalité de la variable qualitative **gender**. Même question avec **level**. Interprétez les résultats.
 
 ```{r}
 # A COMPLETER
 ```
+
+
 
 **Question :** Explorez les autres combinaisons de variables quantitatives avec les variables qualitatives afin de déterminer les variables fortement liées.
 
@@ -368,7 +406,8 @@ ggplot(wineaux,aes(x=variable,y=value))+
 # A COMPLETER
 ```
 
-**Question :** A l'aide de la fonction `eta2()` de la librairie `BioStatR`, calculez le rapport de corrélation $\eta^2$ entre chaque variable quantitative et la variable **Type**. Commentez. Faites de même avec la variable **Qualité**.
+
+**Question :** A l'aide de la fonction `eta2()` de la librairie `BioStatR`, calculez le rapport de corrélation $\eta^2$ entre chaque variable quantitative et la variable **gender**. Commentez. Faites de même avec la variable **level**.
 
 ```{r}
 # A COMPLETER
@@ -376,14 +415,16 @@ ggplot(wineaux,aes(x=variable,y=value))+
 
 ## Entre deux variables qualitatives
 
-**Question :** Analysez la table de contingence entre les deux variables qualitatives **Type** et **Qualite** avec la commande `table()`. Ajoutez les effectifs marginaux avec la commande `addmargins()`.
+**Question :** Analysez la table de contingence entre les deux variables qualitatives **gender** et **level** avec la commande `table()`. Ajoutez les effectifs marginaux avec la commande `addmargins()`.
 
 ```{r}
 # A COMPLETER
 ```
+
 
 **Question :** Calculez et représentez les profils-lignes à l'aide des fonctions `prop.table(..., margin = ...)` et `mosaicplot`. Interprétez les résultats. Faites de même avec les profils-colonnes.
 
 ```{r}
 # A COMPLETER
 ```
+

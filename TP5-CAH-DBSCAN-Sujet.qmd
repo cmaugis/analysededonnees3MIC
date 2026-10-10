@@ -14,7 +14,7 @@ format:
     number-sections: true
 ---
 
-L'objectif de ce TP est d'illustrer les notions abordées pour la classification hiérarchique et la méthode DBSCAN. Les librairies R nécessaires pour ce TP :
+L'objectif de ce TP est d'illustrer les notions abordées pour la classification hiérarchique et la méthode DBSCAN. Les librairies R nécessaires pour ce TP : 
 
 ```{r}
 #| echo: true
@@ -37,25 +37,25 @@ library(seriation)
 
 # Clustering hiérarchique
 
-On reprend dans ce TP les données `wine` disponibles sur la page moodle du cours. On charge ici les données.
+On reprend dans ce TP les données `DataGym3MIC` disponibles sur la page moodle du cours. On charge ici les données et on centre-réduit les variables quantitatives (toutes les variables sauf **gender** et **level**).  
 
 ```{r}
-wine<-read.table("wine.txt",header=T)
-wine$Qualite = as.factor(wine$Qualite)
-wine$Type = factor(wine$Type, labels = c("blanc", "rouge"))
-wineinit<-wine
-wine[,-c(1,2)]<-scale(wine[,-c(1,2)],center=T,scale=T)
-head(wine)
+gym<-read.table("DataGym3MIC.txt",header=T)
+gym$gender = as.factor(gym$gender)
+gym$level = factor(gym$level, labels = c("debutant", "interm", "expert"))
+gyminit<-gym
+gym[,-c(1,8)]<-scale(gym[,-c(1,8)],center=T,scale=T)
+head(gym)
 ```
 
 On fait une ACP pour la visualisation des résultats dans la suite
 
 ```{r}
-resacp<-PCA(wine,quali.sup=c(1,2), scale.unit = TRUE,graph=FALSE)
-fviz_pca_ind(resacp,geom=c("point"),habillage=2)
+resacp<-PCA(gym,quali.sup=c(1,8), scale.unit = TRUE,graph=FALSE)
+fviz_pca_ind(resacp,geom=c("point"),habillage=8)
 ```
 
-**Question** : A l'aide de la fonction `hclust()`, faites une classification hiérarchique des données de vins avec les mesures d'agrégation `single`, `complete` et `average` respectivement. Comparez visuellement les dendrogrammes associés. Commentez.
+**Question **: A l'aide de la fonction `hclust()`, faites une classification hiérarchique des membres de la salle de sport avec les mesures d'agrégation `single`, `complete` et `average` respectivement. Comparez visuellement les dendrogrammes associés. Commentez. 
 
 ```{r}
 #| eval: false
@@ -74,25 +74,29 @@ fviz_dend(hclustsingle,show_labels=FALSE)
 
 ```
 
-**Question :** Déduisez du dendrogramme avec la mesure d'agrégation `complete` une classification en 3 classes. Vous pouvez utiliser la fonction `cutree()`. Comparez-la avec les variables **Qualité** et **Type**. Commentez.
+
+**Question :** Déduisez du dendrogramme avec la mesure d'agrégation `complete` une classification en 3 classes. Vous pouvez utiliser la fonction `cutree()`. Comparez-la avec les variables **gender** et **level**. Commentez.  
 
 ```{r}
 #| eval: false
 # A COMPLETER
 ```
 
-**Question :** Tracez la distribution des variables quantitatives de `wine` en fonction de la classification en 3 classes de la question précédente. Commentez.
+
+
+**Question :** Tracez la distribution des variables quantitatives de `gym` en fonction de la classification en 3 classes de la question précédente. Commentez. 
 
 ```{r}
 #| eval: false
 
-df<-data.frame(wine[,-c(1,2)],Class=as.factor(ClassK3))
+df<-data.frame(gym[,-c(1,8)],Class=as.factor(ClassK3))
 df<-melt(df,id="Class")
 ggplot(df,aes(x=variable,y=value))+
   geom_violin(aes(fill=Class))
 ```
 
-**Question :** Dans cette question et pour les suivantes, on se focalise sur la mesure d'agrégation de Ward. Ajustez une classification hiérarchique avec la mesure de Ward. Que représentent les hauteurs du dendrogramme dans ce cas ?
+
+**Question :** Dans cette question et pour les suivantes, on se focalise sur la mesure d'agrégation de Ward. Ajustez une classification hiérarchique avec la mesure de Ward. Que représentent les hauteurs du dendrogramme dans ce cas ? 
 
 ```{r}
 #| eval: false
@@ -102,7 +106,9 @@ hward<-hclust(...)
 fviz_dend(hward,show_labels=FALSE)
 ```
 
-**Question :** Déterminez le nombre de classes à retenir avec l'indice de Calinski-Harabasz. Vous pouvez vous aider de la fonction `ìndex.G1()` de la librairie `clusterSim`. Tracez la classification obtenue sur le dendrogramme et sur le premier plan factoriel de l'ACP.
+
+
+**Question : ** Déterminez le nombre de classes à retenir avec l'indice de Calinski-Harabasz. Vous pouvez vous aider de la fonction `ìndex.G1()` de la librairie `clusterSim`. Tracez la classification obtenue sur le dendrogramme et sur le premier plan factoriel de l'ACP. 
 
 ```{r}
 #| eval: false
@@ -123,7 +129,9 @@ fviz_dend(....)
 fviz_pca_ind(....)
 ```
 
-**Question :** Comparez la classification obtenue avec la méthode des Kmeans dans le TP 1 et celle obtenue à la question précédente.
+
+
+**Question :** Comparez la classification obtenue avec la méthode des Kmeans dans le TP4 et celle obtenue à la question précédente. 
 
 ```{r}
 #| eval: false
@@ -134,9 +142,11 @@ reskmeans<-kmeans(....)
 
 ```
 
-# DBSCAN
 
-Dans cette partie, on considère les données simulées `chameleon_ds7` disponibles dans la librairie `seriation`.
+
+# DBSCAN 
+
+Dans cette partie, on considère les données simulées `chameleon_ds7` disponibles dans la librairie `seriation`. 
 
 ```{r}
 library(seriation)
@@ -169,9 +179,12 @@ fviz_cluster(res.db, chameleon_ds7, geom="point",ellipse="FALSE")+
   ggtitle("Avec DBSCAN")
 ```
 
+
+
+
 ## Influence des paramètres de DBSCAN
 
-**Question :** Pour étudier l'influence des paramètres `minPts` et `eps`, évaluez le nombre de classes obtenues et le nombre d'individus non classés pour différentes valeurs de ces paramètres. Faites varier minPts dans $\{5,10,15,20,25,30,35,40\}$ et eps dans $\{5,6,\ldots,20\}$.
+**Question :** Pour étudier l'influence des paramètres `minPts` et `eps`, évaluez le nombre de classes obtenues et le nombre d'individus non classés pour différentes valeurs de ces paramètres. Faites varier minPts dans $\{5,10,15,20,25,30,35,40\}$ et eps dans $\{5,6,\ldots,20\}$.  
 
 ```{r}
 #| eval: false
@@ -200,26 +213,36 @@ ggplot(df,aes(x=eps,y=NBNonCl,col=minPts))+
   geom_line()
 ```
 
-**Question :** Pour une valeur de `minPts=30`, déterminez à l'aide de la question précédente la valeur de `eps` qui permet d'avoir un clustering en $9$ classes. Vérifiez ce clustering sur le nuage de points.
+
+
+
+**Question :** Pour une valeur de `minPts=30`, déterminez à l'aide de la question précédente la valeur de `eps` qui permet d'avoir un clustering en $9$ classes. Vérifiez ce clustering sur le nuage de points. 
 
 ```{r}
 # A COMPLETER
 ```
 
-**Question :** Pour une valeur de `minPts=30`, tracez le graphe de distance kNN afin de choisir le paramètre `eps`. Vous pouvez utiliser la fonction `kNNdistplot()`. Qu'en pensez-vous ? Etudiez le clustering obtenu.
+
+
+**Question :** Pour une valeur de `minPts=30`, tracez le graphe de distance kNN afin de choisir le paramètre `eps`. Vous pouvez utiliser la fonction `kNNdistplot()`. Qu'en pensez-vous ? Etudiez le clustering obtenu. 
 
 ```{r}
 #| eval: false
 
 # A COMPLETER
 ```
+
+
+
 
 ## Comparaison avec Kmeans
 
-**Question :** Mettez en place une stratégie de classification de ces données avec les Kmeans. Comparez les résultats. Retrouvez les grandes caractéristiques de ces deux méthodes.
+**Question :** Mettez en place une stratégie de classification de ces données avec les Kmeans. Comparez les résultats. Retrouvez les grandes caractéristiques de ces deux méthodes. 
 
 ```{r}
 #| eval: false
 
 # A COMPLETER
 ```
+
+

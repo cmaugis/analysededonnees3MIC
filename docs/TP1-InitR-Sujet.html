@@ -1230,18 +1230,18 @@ scalaire  1     -none- numeric  </code></pre>
 <span id="cb200-6"><a href="#cb200-6" aria-hidden="true" tabindex="-1"></a>H</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     taille    masse sexe
-1  166.2614 52.77258    M
-2  163.6951 79.23694    F
-3  158.4672 56.48438    F
-4  177.9949 87.56146    M
-5  168.4621 55.75180    M
-6  151.6237 65.99000    F
-7  171.9036 76.72670    F
-8  176.3829 68.99808    M
-9  171.4806 68.18099    M
-10 161.0471 56.77077    F
-11 172.0051 73.90135    F
-12 154.8508 85.44970    M</code></pre>
+1  155.9006 80.98331    M
+2  157.2578 50.11490    F
+3  169.2962 73.84531    F
+4  150.9568 75.52221    M
+5  157.3956 52.32354    M
+6  171.5380 79.13691    F
+7  167.4847 57.37178    F
+8  172.3465 88.94228    M
+9  173.9657 54.40539    M
+10 179.3822 57.58017    F
+11 156.9347 81.43282    F
+12 172.4207 89.14937    M</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb202"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb202-1"><a href="#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(H)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1255,12 +1255,12 @@ scalaire  1     -none- numeric  </code></pre>
 <div class="sourceCode cell-code" id="cb204"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb204-1"><a href="#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(H)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     taille          masse           sexe          
- Min.   :151.6   Min.   :52.77   Length:12         
- 1st Qu.:160.4   1st Qu.:56.70   Class :character  
- Median :167.4   Median :68.59   Mode  :character  
- Mean   :166.2   Mean   :68.99                     
- 3rd Qu.:171.9   3rd Qu.:77.35                     
- Max.   :178.0   Max.   :87.56                     </code></pre>
+ Min.   :151.0   Min.   :50.11   Length:12         
+ 1st Qu.:157.2   1st Qu.:56.63   Class :character  
+ Median :168.4   Median :74.68   Mode  :character  
+ Mean   :165.4   Mean   :70.07                     
+ 3rd Qu.:172.4   3rd Qu.:81.10                     
+ Max.   :179.4   Max.   :89.15                     </code></pre>
 </div>
 </div>
 <p>La fonction <code>head()</code> permet de visualiser les premières lignes d’un data.frame</p>
@@ -1268,12 +1268,12 @@ scalaire  1     -none- numeric  </code></pre>
 <div class="sourceCode cell-code" id="cb206"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(H)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    taille    masse sexe
-1 166.2614 52.77258    M
-2 163.6951 79.23694    F
-3 158.4672 56.48438    F
-4 177.9949 87.56146    M
-5 168.4621 55.75180    M
-6 151.6237 65.99000    F</code></pre>
+1 155.9006 80.98331    M
+2 157.2578 50.11490    F
+3 169.2962 73.84531    F
+4 150.9568 75.52221    M
+5 157.3956 52.32354    M
+6 171.5380 79.13691    F</code></pre>
 </div>
 </div>
 </div>
@@ -1283,12 +1283,12 @@ scalaire  1     -none- numeric  </code></pre>
 <div class="sourceCode cell-code" id="cb208"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1" aria-hidden="true" tabindex="-1"></a>H[<span class="dv">1</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    taille    masse sexe
-1 166.2614 52.77258    M</code></pre>
+1 155.9006 80.98331    M</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb210"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1" aria-hidden="true" tabindex="-1"></a>H<span class="sc">$</span>taille</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 166.2614 163.6951 158.4672 177.9949 168.4621 151.6237 171.9036 176.3829
- [9] 171.4806 161.0471 172.0051 154.8508</code></pre>
+<pre><code> [1] 155.9006 157.2578 169.2962 150.9568 157.3956 171.5380 167.4847 172.3465
+ [9] 173.9657 179.3822 156.9347 172.4207</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb212"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb212-1"><a href="#cb212-1" aria-hidden="true" tabindex="-1"></a>H<span class="sc">$</span>sexe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1306,18 +1306,18 @@ scalaire  1     -none- numeric  </code></pre>
 <span id="cb218-2"><a href="#cb218-2" aria-hidden="true" tabindex="-1"></a>MH</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      taille     masse      sexe
- [1,] "166.2614" "52.77258" "M" 
- [2,] "163.6951" "79.23694" "F" 
- [3,] "158.4672" "56.48438" "F" 
- [4,] "177.9949" "87.56146" "M" 
- [5,] "168.4621" "55.75180" "M" 
- [6,] "151.6237" "65.99000" "F" 
- [7,] "171.9036" "76.72670" "F" 
- [8,] "176.3829" "68.99808" "M" 
- [9,] "171.4806" "68.18099" "M" 
-[10,] "161.0471" "56.77077" "F" 
-[11,] "172.0051" "73.90135" "F" 
-[12,] "154.8508" "85.44970" "M" </code></pre>
+ [1,] "155.9006" "80.98331" "M" 
+ [2,] "157.2578" "50.11490" "F" 
+ [3,] "169.2962" "73.84531" "F" 
+ [4,] "150.9568" "75.52221" "M" 
+ [5,] "157.3956" "52.32354" "M" 
+ [6,] "171.5380" "79.13691" "F" 
+ [7,] "167.4847" "57.37178" "F" 
+ [8,] "172.3465" "88.94228" "M" 
+ [9,] "173.9657" "54.40539" "M" 
+[10,] "179.3822" "57.58017" "F" 
+[11,] "156.9347" "81.43282" "F" 
+[12,] "172.4207" "89.14937" "M" </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb220"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb220-1"><a href="#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(MH)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1329,12 +1329,12 @@ scalaire  1     -none- numeric  </code></pre>
 <div class="sourceCode cell-code" id="cb222"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb222-1"><a href="#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.list</span>(H)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$taille
- [1] 166.2614 163.6951 158.4672 177.9949 168.4621 151.6237 171.9036 176.3829
- [9] 171.4806 161.0471 172.0051 154.8508
+ [1] 155.9006 157.2578 169.2962 150.9568 157.3956 171.5380 167.4847 172.3465
+ [9] 173.9657 179.3822 156.9347 172.4207
 
 $masse
- [1] 52.77258 79.23694 56.48438 87.56146 55.75180 65.99000 76.72670 68.99808
- [9] 68.18099 56.77077 73.90135 85.44970
+ [1] 80.98331 50.11490 73.84531 75.52221 52.32354 79.13691 57.37178 88.94228
+ [9] 54.40539 57.58017 81.43282 89.14937
 
 $sexe
  [1] "M" "F" "F" "M" "M" "F" "F" "M" "M" "F" "F" "M"</code></pre>

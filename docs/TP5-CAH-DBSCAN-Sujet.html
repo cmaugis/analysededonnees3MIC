@@ -205,40 +205,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="clustering-hiérarchique" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Clustering hiérarchique</h1>
-<p>On reprend dans ce TP les données <code>wine</code> disponibles sur la page moodle du cours. On charge ici les données.</p>
-<div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-2_01b65c16c21908586d6e4f27d01f27a6">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wine<span class="ot">&lt;-</span><span class="fu">read.table</span>(<span class="st">"wine.txt"</span>,<span class="at">header=</span>T)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>wine<span class="sc">$</span>Qualite <span class="ot">=</span> <span class="fu">as.factor</span>(wine<span class="sc">$</span>Qualite)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>wine<span class="sc">$</span>Type <span class="ot">=</span> <span class="fu">factor</span>(wine<span class="sc">$</span>Type, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"blanc"</span>, <span class="st">"rouge"</span>))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>wineinit<span class="ot">&lt;-</span>wine</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]<span class="ot">&lt;-</span><span class="fu">scale</span>(wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],<span class="at">center=</span>T,<span class="at">scale=</span>T)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>On reprend dans ce TP les données <code>DataGym3MIC</code> disponibles sur la page moodle du cours. On charge ici les données et on centre-réduit les variables quantitatives (toutes les variables sauf <strong>gender</strong> et <strong>level</strong>).</p>
+<div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-2_205e94c40a57dd5d62bf8ca405a83654">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gym<span class="ot">&lt;-</span><span class="fu">read.table</span>(<span class="st">"DataGym3MIC.txt"</span>,<span class="at">header=</span>T)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>gym<span class="sc">$</span>gender <span class="ot">=</span> <span class="fu">as.factor</span>(gym<span class="sc">$</span>gender)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>gym<span class="sc">$</span>level <span class="ot">=</span> <span class="fu">factor</span>(gym<span class="sc">$</span>level, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"debutant"</span>, <span class="st">"interm"</span>, <span class="st">"expert"</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>gyminit<span class="ot">&lt;-</span>gym</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)]<span class="ot">&lt;-</span><span class="fu">scale</span>(gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)],<span class="at">center=</span>T,<span class="at">scale=</span>T)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gym)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     Qualite  Type      AcidVol    AcidCitr     SO2lbr      SO2tot     Densite
-1352  medium rouge  1.638714588 -1.92626362 -1.2083376 -1.15967786 -0.46497450
-5493  medium blanc -0.068544417 -1.35617574 -0.7004747 -0.85707581 -0.33499781
-5153  medium blanc -0.800226847 -0.59605856  0.5409681 -0.02047014  1.32391517
-5308  medium blanc -0.007570881  0.92417581  1.7824108  1.27893867  1.08790487
-3866  medium blanc  0.419243870  0.03737243 -0.5311870  0.99413674  0.03783006
-694   medium rouge  0.785085086  0.03737243 -0.4747578  0.19313131  1.27260858
-          Alcool
-1352  1.14546909
-5493 -1.12092616
-5153 -1.29526426
-5308 -1.29526426
-3866  0.09944051
-694  -0.94658806</code></pre>
+<pre><code>  gender      weight      height   duration    calories        fat      water
+1   Male  0.68114221 -0.09849406  1.2639483  1.49492124 -1.9773038  1.4552185
+2 Female  0.04929028 -1.50782814  0.1270330 -0.08224134  1.4255680 -0.8774464
+3 Female -0.27135099 -0.48997575 -0.4268488 -0.83781226  1.3456884 -0.5442086
+4   Male -0.97393261 -0.17679039 -1.9427358 -1.36964616  0.6107959 -0.8774464
+5   Male -1.30871982  0.52787664 -1.7969775 -1.28161848  0.6746996  0.2888860
+6 Female -0.74759759 -0.33338307  0.9724315  0.77236071 -1.5140020  0.1222671
+     level         bmi
+1   expert  0.79387004
+2   interm  1.06410462
+3   interm -0.03034546
+4 debutant -0.97616652
+5 debutant -1.57969043
+6   expert -0.65488762</code></pre>
 </div>
 </div>
 <p>On fait une ACP pour la visualisation des résultats dans la suite</p>
-<div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-3_38a019ae3ac60e558d3411ca62cd4637">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>resacp<span class="ot">&lt;-</span><span class="fu">PCA</span>(wine,<span class="at">quali.sup=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">scale.unit =</span> <span class="cn">TRUE</span>,<span class="at">graph=</span><span class="cn">FALSE</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(resacp,<span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>),<span class="at">habillage=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-3_4bc32ff3544b8f6cdd915bc14f15de09">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>resacp<span class="ot">&lt;-</span><span class="fu">PCA</span>(gym,<span class="at">quali.sup=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>), <span class="at">scale.unit =</span> <span class="cn">TRUE</span>,<span class="at">graph=</span><span class="cn">FALSE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(resacp,<span class="at">geom=</span><span class="fu">c</span>(<span class="st">"point"</span>),<span class="at">habillage=</span><span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TP5-CAH-DBSCAN-Sujet_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><strong>Question</strong> : A l’aide de la fonction <code>hclust()</code>, faites une classification hiérarchique des données de vins avec les mesures d’agrégation <code>single</code>, <code>complete</code> et <code>average</code> respectivement. Comparez visuellement les dendrogrammes associés. Commentez.</p>
+<p><strong>Question </strong>: A l’aide de la fonction <code>hclust()</code>, faites une classification hiérarchique des membres de la salle de sport avec les mesures d’agrégation <code>single</code>, <code>complete</code> et <code>average</code> respectivement. Comparez visuellement les dendrogrammes associés. Commentez.</p>
 <div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-4_f442bfd73c503d1729709d9c7e01e214">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hclustsingle<span class="ot">&lt;-</span><span class="fu">hclust</span>(...)</span>
@@ -252,13 +252,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_dend</span>(hclustsingle,<span class="at">show_labels=</span><span class="cn">FALSE</span>)</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Déduisez du dendrogramme avec la mesure d’agrégation <code>complete</code> une classification en 3 classes. Vous pouvez utiliser la fonction <code>cutree()</code>. Comparez-la avec les variables <strong>Qualité</strong> et <strong>Type</strong>. Commentez.</p>
+<p><strong>Question :</strong> Déduisez du dendrogramme avec la mesure d’agrégation <code>complete</code> une classification en 3 classes. Vous pouvez utiliser la fonction <code>cutree()</code>. Comparez-la avec les variables <strong>gender</strong> et <strong>level</strong>. Commentez.</p>
 <div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-5_32c992e6a3483a222ed66d77a272939c">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A COMPLETER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Tracez la distribution des variables quantitatives de <code>wine</code> en fonction de la classification en 3 classes de la question précédente. Commentez.</p>
-<div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-6_3b69cd8641080cd4e00f47d957c526f9">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">data.frame</span>(wine[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],<span class="at">Class=</span><span class="fu">as.factor</span>(ClassK3))</span>
+<p><strong>Question :</strong> Tracez la distribution des variables quantitatives de <code>gym</code> en fonction de la classification en 3 classes de la question précédente. Commentez.</p>
+<div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-6_6ba48392e70bdf9e687cb434aa43b3bc">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">data.frame</span>(gym[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>)],<span class="at">Class=</span><span class="fu">as.factor</span>(ClassK3))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">melt</span>(df,<span class="at">id=</span><span class="st">"Class"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df,<span class="fu">aes</span>(<span class="at">x=</span>variable,<span class="at">y=</span>value))<span class="sc">+</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="fu">aes</span>(<span class="at">fill=</span>Class))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -269,7 +269,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>hward<span class="ot">&lt;-</span><span class="fu">hclust</span>(...)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_dend</span>(hward,<span class="at">show_labels=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Déterminez le nombre de classes à retenir avec l’indice de Calinski-Harabasz. Vous pouvez vous aider de la fonction <code>ìndex.G1()</code> de la librairie <code>clusterSim</code>. Tracez la classification obtenue sur le dendrogramme et sur le premier plan factoriel de l’ACP.</p>
+<p><strong>Question : </strong> Déterminez le nombre de classes à retenir avec l’indice de Calinski-Harabasz. Vous pouvez vous aider de la fonction <code>ìndex.G1()</code> de la librairie <code>clusterSim</code>. Tracez la classification obtenue sur le dendrogramme et sur le premier plan factoriel de l’ACP.</p>
 <div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-8_6ed3aa813cd14f7bca4f71e14eb96036">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A completer</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>CH<span class="ot">&lt;-</span><span class="cn">NULL</span></span>
@@ -286,7 +286,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_dend</span>(....)</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(....)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Question :</strong> Comparez la classification obtenue avec la méthode des Kmeans dans le TP 1 et celle obtenue à la question précédente.</p>
+<p><strong>Question :</strong> Comparez la classification obtenue avec la méthode des Kmeans dans le TP4 et celle obtenue à la question précédente.</p>
 <div class="cell" data-hash="TP5-CAH-DBSCAN-Sujet_cache/html/unnamed-chunk-9_a09995c52797b4a63c240d730130049d">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A completer</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>reskmeans<span class="ot">&lt;-</span><span class="fu">kmeans</span>(....)</span>
