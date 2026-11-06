@@ -91,7 +91,7 @@ Pour changer de répertoire de travail, on peut
 
 </p>
 
-> Créez un dossier de travail pour ce TP dans votre home (en dehors de RStudio!)<br> Placez dans ce dossier les fichiers TP1-InitR.qmd et ExempleQuarto.qmd disponibles sur moodle. <br> Dans RStudio, placez-vous dans ce dossier de travail pour le TP. <br> Ouvrez le fichier ExempleQuarto.qmd.
+> Créez un dossier de travail pour ce TP dans votre home (en dehors de RStudio!)<br> Placez dans ce dossier les fichiers TP1-InitR-Sujet.qmd et ExempleQuarto.qmd disponibles sur moodle. <br> Dans RStudio, placez-vous dans ce dossier de travail pour le TP. <br> Ouvrez le fichier ExempleQuarto.qmd.
 
 ### Les librairies pour R
 
